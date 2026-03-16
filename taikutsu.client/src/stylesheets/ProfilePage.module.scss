@@ -1,0 +1,88 @@
+.profilePageBg {
+    width: 100vw;
+    height: 100vh;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    padding-top: 100px;
+
+    .profileBody {
+        width: 50vw;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        gap: 40px;
+        height: 60vh;
+        background-color: #ffba7e;
+        padding: 30px;
+
+        .topSection {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 20px;
+            width: 700px;
+
+            img {
+                width: 120px;
+            }
+
+            .nameAndEmail {
+                display: flex;
+                justify-content: center;
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 10px;
+                font-size: 24px;
+
+                span:nth-child(1) {
+                    font-weight: bold;
+                }
+
+                span:nth-child(2) {
+                    opacity: 0.5;
+                }
+            }
+        }
+
+        .registrationDate {
+            font-weight: bold;
+            font-size: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 100px;
+        }
+
+        hr {
+            width: 700px;
+        }
+
+        .userPreferences{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            gap: 20px;
+
+            span{
+                font-size: 20px;
+                font-weight: bold;
+            }
+
+            ul{
+                display: flex;
+                gap: 40px;
+                font-size: 18px;
+
+                .preferenceTag{
+                    background-color: white;
+                    border-radius: 50px;
+                    padding: 10px;
+                    font-weight: bold;
+                    color: #ff7700;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,35 @@
+.aboutUsBg {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    flex-direction: column;
+    background-image: url('../assets/TaikutsuPattern(2).png'), linear-gradient(45deg, #ff7700 0%,#ffe30e 99%,#ffe30e 100%,#ffe30e 100%,#ffd500 100%);
+
+
+    div{
+        background-color: white;
+        width: 400px;
+        height: 400px;
+        display: flex;
+        margin-top: 50px;
+        justify-content: center;
+        align-items: center;
+        border-radius: 500px;
+
+        img{
+            width: 200px;
+        }
+    }
+
+    p {
+        width: 1000px;
+        font-size: 24px;
+
+        span {
+            color: #ffe30e;
+            font-weight: bold;
+        }
+    }
+}

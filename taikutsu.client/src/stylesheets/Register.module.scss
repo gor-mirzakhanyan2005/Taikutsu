@@ -1,0 +1,54 @@
+.registerBg {
+    width: 100vw;
+    height: 100vh;
+    background-image: linear-gradient(to right top, #ff7700, #ff9300, #ffae00, #ffc900, #ffe30e);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.registerCont {
+    background-color: white;
+    height: 70vh;
+    width: 55vw;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.registerForm {
+    display: flex;
+    gap: 5px;
+    flex-direction: column;
+}
+
+    .registerForm input {
+        margin-bottom: 5px;
+        width: 250px;
+        align-self: center;
+    }
+
+    .registerForm label {
+        margin-left: 23px;
+    }
+
+    .registerForm input:last-child {
+        background-image: linear-gradient(to right, #ffd500, #ffcc00, #ffc300, #ffbb00, #ffb200);
+        border-radius: 25px;
+        border-style: none;
+        width: 297px;
+        height: 47px;
+        margin-top: 40px;
+        font-family: Bahnschrift;
+        font-size: 14px;
+    }
+
+.alreadyHaveAccount{
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.loginLink {
+    color: #FF7700;
+}

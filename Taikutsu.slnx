@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="taikutsu.client/taikutsu.client.esproj">
+    <Build />
+    <Deploy />
+  </Project>
+  <Project Path="Taikutsu.Server/Taikutsu.Server.csproj" />
+</Solution>

@@ -1,0 +1,95 @@
+.pageContainer {
+    width: 100vw;
+    height: 85vh;
+    background-image: url('../assets/TaikutsuPattern(8).png');
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+
+    .infoContainer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: row;
+        width: 80vw;
+        gap: 150px;
+        height: 80vh;
+
+        img {
+            height: 500.5px;
+        }
+
+        .tagsAndOther {
+            ul {
+                display: flex;
+                list-style: none;
+                flex-direction: row;
+                gap: 10px;
+
+                .tag {
+                    color: white;
+                    background-color: #ff7700;
+                    padding: 10px;
+                    border-radius: 25px;
+                }
+            }
+
+            h2 {
+                font-size: 48px;
+            }
+
+            p {
+                font-size: 20px;
+                width: 580px;
+            }
+
+            gap: 20px;
+            width: 100%;
+            height: 100%;
+            justify-content: center;
+            display: flex;
+            flex-direction: column;
+            padding-left: 20px;
+            padding-right: 20px;
+
+            .priceAndButtons {
+                display: flex;
+                flex-direction: row;
+                gap: 40px;
+                align-items: center;
+                justify-content: center;
+
+                span{
+                    font-size: 36px;
+                }
+
+                .buttons {
+                    display: flex;
+                    flex-direction: row;
+
+                    button:nth-child(1) {
+                        background-color: #ff7700;
+                        border: none;
+                        padding: 10px;
+                        border-top-left-radius: 50px;
+                        border-bottom-left-radius: 50px;
+                        width: 210px;
+                        height: 50px;
+                    }
+
+                    button:nth-child(2) {
+                        background-color: #515151;
+                        border: 2px solid #000000 inset;
+                        padding: 10px;
+                        border-top-right-radius: 50px;
+                        border-bottom-right-radius: 50px;
+                        width: 150px;
+                        height: 50px;
+                        color: white;
+                    }
+                }
+            }
+        }
+    }
+}

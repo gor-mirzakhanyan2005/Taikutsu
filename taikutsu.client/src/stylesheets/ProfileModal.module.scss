@@ -1,0 +1,52 @@
+.profileModalBg {
+    width: 100vw;
+    height: 100vh;
+    backdrop-filter: brightness(0.8);
+    display: flex;
+    position: absolute;
+    justify-content: flex-end;
+    align-items: flex-start;
+    z-index: 1;
+
+    .modalBody {
+        background-color: white;
+        width: 51.05vw;
+        height: 50vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .profileChip {
+            width: 40vw;
+            height: 20vh;
+            background-color: #FFBA7E;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+
+            img {
+                width: 100px;
+            }
+
+            .nameAndEmail {
+                display: flex;
+                justify-content: center;
+                align-items: flex-start;
+                flex-direction: column;
+
+                span:nth-child(1) {
+                    font-weight: bold;
+                }
+
+                span:nth-child(2) {
+                    opacity: 0.5;
+                }
+            }
+
+            a {
+                margin-left: 80px;
+            }
+        }
+    }
+}

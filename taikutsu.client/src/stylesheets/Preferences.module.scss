@@ -1,0 +1,74 @@
+.preferencesBg {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(45deg, #ff7700 0%,#ffe30e 79%,#ffe30e 79%,#ffe30e 100%);
+    flex-direction: column;
+}
+
+.preferencesBg h1{
+    font-size: 64px;
+    margin-bottom: 50px;
+}
+
+.tagListCont{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.tagList{
+    margin-top: 25px;
+    margin-bottom: 25px;
+    width: 900px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    list-style: none;
+    gap: 10px;
+}
+
+.confirmPreferences {
+    margin-top: 75px;
+    width: 343px;
+    height: 55px;
+    border-radius: 50px;
+    border: none;
+    font-size: 16px;
+    background-color: black;
+    color: white;
+}
+
+.showMore {
+    margin: 0 auto;
+    width: 143px;
+    height: 35px;
+    border-radius: 50px;
+    border: none;
+    font-size: 16px;
+    background-color: black;
+    color: white;
+    justify-self: center;
+}
+
+.selectedTag {
+    cursor: pointer;
+    font-size: 20px;
+    background-color: black;
+    padding: 10px;
+    border-radius: 25px;
+    color: #FFF;
+}
+
+.unselectedTag {
+    cursor: pointer;
+    font-size: 20px;
+    background-color: white;
+    padding: 10px;
+    border-radius: 25px;
+    border: 2px solid #FF7700;
+    color: #FF7700;
+}
