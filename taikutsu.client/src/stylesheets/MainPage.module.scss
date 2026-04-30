@@ -3,7 +3,12 @@
     flex-direction: column;
     align-items: center;
     width: 100vw;
-    background-image: url('../assets/TaikutsuPattern(2).png'), linear-gradient(45deg, #ff7700 0%,#ffe30e 99%,#ffe30e 100%,#ffe30e 100%,#ffd500 100%);
+    background-image: var(--bg);
+    background-color: var(--bgColor);
+
+    background-size: 2000px auto, cover;
+    background-repeat: repeat, no-repeat;
+    background-position: top left, center;
 }
 
 .tagSearchCont {
@@ -16,6 +21,10 @@
     padding-bottom: 15vh;
     width: 1000px;
     gap: 40px;
+
+    h2 {
+        color: var(--auxText);
+    }
 }
 
 .tagSearchTags {
@@ -29,17 +38,17 @@
 
     li {
         transition: 0.1s;
-        background-color: white;
+        background-color: var(--tagBg);
         padding: 10px;
-        color: #ff7700;
+        color: var(--tagText);
         border-radius: 25px;
     }
 
         li:hover {
             transition: 0.1s;
             transform: scale(1.15);
-            background-color: #ff7700;
-            color: white;
+            background-color: var(--tagHover);
+            color: var(--tagHoverText);
         }
 }
 

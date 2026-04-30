@@ -20,12 +20,11 @@ namespace Taikutsu.Server.Controllers
             _configuration = configuration;
         }
 
-        private string GenerateJwtToken(Guid userId, string email)
+        private string GenerateJwtToken(string userId)
         {
             var claims = new[]
             {
-                new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
-                new Claim(ClaimTypes.Name, email)
+                new Claim(ClaimTypes.NameIdentifier, userId),
             };
 
             var key = new SymmetricSecurityKey(
@@ -56,8 +55,8 @@ namespace Taikutsu.Server.Controllers
         {
 
             //Валідація
-            if (string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Password)) {
-                return BadRequest("Email and password required");
+            if (string.IsNullOrEmpty(request.Username) || string.IsNullOrEmpty(request.Password)) {
+                return BadRequest("Username and password required");
             }
 
             //З'єднання до БД
@@ -67,41 +66,39 @@ namespace Taikutsu.Server.Controllers
             await connection.OpenAsync();
 
             //Команда для перевірки
-            var checkEmail = new NpgsqlCommand("select count(*) from public.users where email = @email or username = @username", connection);
+            var checkUsername = new NpgsqlCommand("select count(*) from public.users where username = @username", connection);
 
             //Параметри команди
-            checkEmail.Parameters.AddWithValue("username", request.Username);
-            checkEmail.Parameters.AddWithValue("email", request.Email);
+            checkUsername.Parameters.AddWithValue("username", request.Username);
 
             //Повертаємо кількість строк, які співпадають з умовами команди
-            var exists = (long)await checkEmail.ExecuteScalarAsync();
+            var exists = (long)await checkUsername.ExecuteScalarAsync();
 
             //Якщо є більше ніж 0 строк зі співпадаючими даними
             if(exists > 0)
             {
                 //Повертаємо 400
-                return BadRequest("Email or username already registered");
+                return BadRequest("Username already registered");
             }
 
             //Хешування паролю
             var passwordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
 
             var insertUserCmd = new NpgsqlCommand(
-                "insert into public.users (userid, username, email, passwordhash, regisdate) values (@UserId, @UserName, @Email, @PasswordHash, @RegisDate)",
+                "insert into public.users (userid, username, passwordhash, regisdate) values (@UserId, @UserName, @PasswordHash, @RegisDate)",
                 connection
             );
 
-            var userId = Guid.NewGuid();
+            var userId = $"user_{Guid.NewGuid()}";
 
             insertUserCmd.Parameters.AddWithValue("UserId", userId);
             insertUserCmd.Parameters.AddWithValue("Username", request.Username);
-            insertUserCmd.Parameters.AddWithValue("Email", request.Email);
             insertUserCmd.Parameters.AddWithValue("PasswordHash", passwordHash);
             insertUserCmd.Parameters.AddWithValue("RegisDate", DateTime.UtcNow);
 
             await insertUserCmd.ExecuteNonQueryAsync();
 
-            var jwtToken = GenerateJwtToken(userId, request.Email);
+            var jwtToken = GenerateJwtToken(userId.ToString());
 
             Response.Cookies.Append("jwt", jwtToken, new CookieOptions
             {
@@ -115,7 +112,6 @@ namespace Taikutsu.Server.Controllers
             {
                 userId = userId,
                 username = request.Username,
-                email = request.Email,
                 token = jwtToken
             });
         }

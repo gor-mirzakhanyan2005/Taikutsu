@@ -16,10 +16,72 @@ namespace Taikutsu.Server.Controllers
     {
 
         private readonly IConfiguration _configuration;
+        private readonly IWebHostEnvironment _env;
 
-        public ProductController(IConfiguration configuration)
+        public ProductController(IConfiguration configuration, IWebHostEnvironment env)
         {
             _configuration = configuration;
+            _env = env;
+        }
+
+        [HttpGet("recommended")]
+        public async Task<IActionResult> GetRecommended([FromQuery] string userId)
+        {
+            string connectionString = _configuration.GetConnectionString("DiplomaWorkDB");
+            await using var conn = new NpgsqlConnection(connectionString);
+            try
+            {
+                await conn.OpenAsync();
+
+                var cmd = new NpgsqlCommand(@"select 
+                    p.*,
+                    SUM(up.score) as total_score
+                    from products p
+                    join userpreferences up
+                        on up.category = ANY(p.categories)
+                    where up.userid = @userid
+                    group by 
+                        p.productid,
+                        p.productname,
+                        p.productdescription,
+                        p.productthumbnail,
+                        p.productprice,
+                        p.productdiscount,
+                        p.productrating,
+                        p.countbought,
+                        p.categories,
+                        p.productimages
+                    order by total_score desc, p.countbought desc, p.productrating desc
+                    limit 20;", conn);
+
+                cmd.Parameters.AddWithValue("userid", userId);
+
+                var reader = await cmd.ExecuteReaderAsync();
+
+                var products = new List<ProductModel>();
+
+                while (await reader.ReadAsync())
+                {
+                    products.Add(new ProductModel()
+                    {
+                        ProductID = reader.GetInt32(0),
+                        ProductName = reader.GetString(1),
+                        ProductDescription = reader.GetString(2),
+                        ProductThumbnail = reader.GetString(3),
+                        ProductPrice = reader.GetFloat(4),
+                        ProductDiscount = reader.GetInt32(5),
+                        ProductRating = reader.GetInt32(6),
+                        ProductCountBought = reader.GetInt32(7),
+                        Categories = reader.GetFieldValue<string[]>(8),
+                        ProductImages = reader.GetFieldValue<string[]>(9)
+                    });
+                }
+                return Ok(products);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
 
@@ -38,19 +100,20 @@ namespace Taikutsu.Server.Controllers
 
                 using var reader = await cmd.ExecuteReaderAsync();
 
-                while(await reader.ReadAsync())
+                while (await reader.ReadAsync())
                 {
                     products.Add(new ProductModel
                     {
                         ProductID = reader.GetInt32(0),
                         ProductName = reader.GetString(1),
                         ProductDescription = reader.GetString(2),
-                        ProductImage = reader.GetFieldValue<byte[]>(3),
+                        ProductThumbnail = reader.GetString(3),
                         ProductPrice = reader.GetFloat(4),
                         ProductDiscount = reader.GetInt32(5),
                         ProductRating = reader.GetInt32(6),
                         ProductCountBought = reader.GetInt32(7),
-                        Categories = reader.GetFieldValue<string[]>(8)
+                        Categories = reader.GetFieldValue<string[]>(8),
+                        ProductImages = reader.GetFieldValue<string[]>(9)
                     }
                     );
                 }

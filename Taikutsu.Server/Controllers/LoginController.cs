@@ -20,12 +20,11 @@ namespace Taikutsu.Server.Controllers
             _configuration = configuration;
         }
 
-        private string GenerateJwtToken(Guid userId, string email)
+        private string GenerateJwtToken(string userId)
         {
             var claims = new[]
             {
-                new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
-                new Claim(ClaimTypes.Name, email)
+                new Claim(ClaimTypes.NameIdentifier, userId),
             };
 
             var key = new SymmetricSecurityKey(
@@ -55,9 +54,9 @@ namespace Taikutsu.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            if(string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Password))
+            if(string.IsNullOrEmpty(request.Username) || string.IsNullOrEmpty(request.Password))
             {
-                return BadRequest("Email and password required");
+                return BadRequest("Username and password required");
             }
 
             var connString = _configuration.GetConnectionString("DiplomaWorkDB");
@@ -65,8 +64,8 @@ namespace Taikutsu.Server.Controllers
             await using var connection = new NpgsqlConnection(connString);
             await connection.OpenAsync();
 
-            var checkUser = new NpgsqlCommand("select userid, username, email, passwordhash, userpreferences, regisdate from public.users where email = @email", connection);
-            checkUser.Parameters.AddWithValue("email", request.Email);
+            var checkUser = new NpgsqlCommand("select userid, username, passwordhash, userpreferences, regisdate from public.users where username = @username", connection);
+            checkUser.Parameters.AddWithValue("username", request.Username);
 
             await using var reader = await checkUser.ExecuteReaderAsync();
 
@@ -75,19 +74,18 @@ namespace Taikutsu.Server.Controllers
                 return BadRequest("No such user!");
             }
 
-            var userId = reader.GetGuid(0);
+            var userId = reader.GetString(0);
             var username = reader.GetString(1);
-            var email = reader.GetString(2);
-            var passwordHash = reader.GetString(3);
-            var userpreferences = reader.GetFieldValue<string[]>(4);
-            var regisdate = reader.GetDateTime(5);
+            var passwordHash = reader.GetString(2);
+            var userpreferences = reader.GetFieldValue<string[]>(3);
+            var regisdate = reader.GetDateTime(4);
 
             if (!BCrypt.Net.BCrypt.Verify(request.Password, passwordHash))
             {
                 return BadRequest("Incorrect password.");
             }
 
-            var jwtToken = GenerateJwtToken(userId, email);
+            var jwtToken = GenerateJwtToken(userId);
 
             Response.Cookies.Append("jwt", jwtToken, new CookieOptions
             {
@@ -99,8 +97,8 @@ namespace Taikutsu.Server.Controllers
 
             return Ok(new
             {
+                userId = userId,
                 token = jwtToken,
-                email = email,
                 username = username,
                 userpreferences = userpreferences,
                 regisdate = regisdate

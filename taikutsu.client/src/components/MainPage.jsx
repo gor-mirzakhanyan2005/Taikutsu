@@ -1,10 +1,14 @@
 ﻿import styles from '../stylesheets/MainPage.module.scss';
 import ProductCards from './ProductCards';
-import { ProductContext } from '../App';
-import { useState } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { ProductContext, UserContext, DarkModeContext } from '../App';
 
 function MainPage({ searchBar }) {
     const [selectedCategory, setSelectedCategory] = useState("");
+
+    const { setProducts } = useContext(ProductContext);
+    const { userId } = useContext(UserContext);
+    const { darkmode } = useContext(DarkModeContext);
 
     const categoryList = [
         { name: "Electronics", emoji: "🔌" },
@@ -35,12 +39,31 @@ function MainPage({ searchBar }) {
         { name: "Gardening", emoji: "🌱" }
     ];
 
+    useEffect(() => {
+        if (!userId) return;
+
+        fetch(`/api/products/recommended?userId=${userId}`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.length === 0) {
+                    return fetch("/api/products").then(res => res.json())
+                }
+                return data;
+            })
+            .then(finalData => {
+                finalData.forEach(p => p.count = 1);
+                setProducts(finalData);
+            });
+
+        console.log(userId);
+    }, [userId]);
+
     return (
-      <>
-      <main className={styles.mainPageBg}>
-          <div className={styles.tagSearchCont}>
-              <h2>...or, filter with tags!</h2>
-              <ul className={styles.tagSearchTags}>
+        <>
+            <main data-theme={darkmode ? "dark" : "light"} className={styles.mainPageBg}>
+                <div className={styles.tagSearchCont}>
+                    <h2>...or, filter with tags!</h2>
+                    <ul className={styles.tagSearchTags}>
                         {
                             categoryList.map(category => {
                                 return (
@@ -48,17 +71,18 @@ function MainPage({ searchBar }) {
                                         setSelectedCategory(category.name)
                                         console.log(selectedCategory)
                                     }
-}>
+                                    }>
                                         <span>{category.name}{category.emoji}</span>
                                     </li>
-                            ) })
+                                )
+                            })
                         }
-              </ul>
-          </div>
+                    </ul>
+                </div>
                 <ProductCards searchBar={searchBar} selectedCategory={selectedCategory} />
             </main>
         </>
-  );
+    );
 }
 
 export default MainPage;

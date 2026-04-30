@@ -2,7 +2,7 @@
 {
     public class CartUpdateRequests
     {
-       public string UserEmail { get; set; }
+       public string UserId { get; set; }
        public List<ProductBriefInfo> Cart { get; set; }
     }
 

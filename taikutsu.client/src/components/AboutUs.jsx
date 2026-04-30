@@ -1,9 +1,13 @@
 import styles from '../stylesheets/AboutUs.module.scss';
-import TaikutsuLogo from '../assets/TaikutsuLogo(2).svg'
+import TaikutsuLogo from '../assets/TaikutsuLogo(2).svg';
+import { useContext } from 'react';
+import { DarkModeContext } from '../App'
 
 function AboutUs() {
+  const { darkmode } = useContext(DarkModeContext);
+
   return (
-      <div className={styles.aboutUsBg}>
+      <div data-theme={darkmode ? "dark" : "light"}  className={styles.aboutUsBg}>
           <div>
               <img src={TaikutsuLogo} />
           </div>

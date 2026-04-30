@@ -3,13 +3,13 @@
     height: 100vh;
     backdrop-filter: brightness(0.8);
     display: flex;
-    position: absolute;
+    position: fixed;
     justify-content: flex-end;
     align-items: flex-start;
     z-index: 1;
 
     .modalBody {
-        background-color: white;
+        background-color: var(--profileModal);
         width: 51.05vw;
         height: 50vh;
         display: flex;
@@ -18,8 +18,8 @@
 
         .profileChip {
             width: 40vw;
-            height: 20vh;
-            background-color: #FFBA7E;
+            height: 25vh;
+            background-color: var(--profileChip);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -29,11 +29,37 @@
                 width: 100px;
             }
 
-            .nameAndEmail {
+            .profile {
                 display: flex;
                 justify-content: center;
-                align-items: flex-start;
+                align-items: center;
                 flex-direction: column;
+
+                .nameAndSignIn {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    flex-direction: column;
+                    gap: 20px;
+
+                    span:nth-child(1) {
+                        font-weight: bold;
+                    }
+
+                    a{
+                        border-radius: 200px;
+                        padding: 10px 55px;
+                        background-color: var(--profileChipButton);
+                    }
+                }
+            }
+
+            .notLoggedIn {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+                gap: 20px;
 
                 span:nth-child(1) {
                     font-weight: bold;
@@ -42,10 +68,14 @@
                 span:nth-child(2) {
                     opacity: 0.5;
                 }
-            }
 
-            a {
-                margin-left: 80px;
+                button {
+                    background-color: var(--profileChipButton);
+                    width: 200px;
+                    padding: 10px;
+                    border: none;
+                    border-radius: 20px;
+                }
             }
         }
     }

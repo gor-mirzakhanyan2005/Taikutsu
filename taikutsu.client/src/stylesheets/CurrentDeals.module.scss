@@ -7,14 +7,16 @@
     display: flex;
     flex-direction: column;
     gap: 150px;
-    background-image: url('../assets/TaikutsuPattern(2).png'), linear-gradient(45deg, #ff7700 0%,#ffe30e 99%,#ffe30e 100%,#ffe30e 100%,#ffd500 100%);
+    background-image: var(--bg);
+    background-color: var(--bgColor);
 
-        h1{
-            font-size: 48px;
-        }
+    h1 {
+        font-size: 48px;
+        color: var(--auxText);
+    }
 }
 
-.dealList{
+.dealList {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -23,7 +25,7 @@
 }
 
 .dealCard {
-    background-color: white;
+    background-color: var(--cardBg);
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -35,7 +37,6 @@
     width: 340px;
     height: 670px;
     gap: 25px;
-    background-color: white;
     display: flex;
     flex-direction: column;
 
@@ -51,15 +52,18 @@
         font-size: 16px;
         width: 300px;
         height: 50px;
+        color: var(--auxText);
     }
 
     .price {
         align-self: center;
         font-size: 28px;
+        color: var(--auxText);
     }
 
     .oldPrice {
         text-decoration: line-through;
+        color: var(--oldPrice);
     }
 
     .addToCart {
@@ -72,7 +76,7 @@
         margin-top: 605px;
         width: 340px;
         font-size: 18px;
-        background: linear-gradient(45deg, #db6600 0%,#db6600 28%,#ffd269 99%,#ffd269 100%);
+        background: var(--cardButtonBg);
     }
 
     .tagList {
@@ -85,9 +89,9 @@
     }
 
     .tag {
-        background-color: #ff7700;
+        background-color: var(--cardTagBg);
         padding: 5px;
-        color: white;
+        color: var(--cardTagText);
         border-radius: 50px;
         font-size: 16px;
     }
@@ -123,9 +127,9 @@
         transition: 0.1s;
 
         .addToCart:hover {
-            background: white;
-            border: 2px solid #FF7700;
-            color: #FF7700;
+            background: var(--cardBg);
+            border: 2px solid var(--cardButtonBgTextHover);
+            color: var(--cardButtonBgTextHover);
             transition: 0.2s;
         }
     }

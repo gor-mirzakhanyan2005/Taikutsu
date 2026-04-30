@@ -16,12 +16,12 @@
 
     a{
         text-decoration: none;
-        color: black;
+        color: var(--auxText);
     }
 }
 
 .productCard {
-    background-color: white;
+    background-color: var(--cardBg);
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -33,86 +33,95 @@
     width: 340px;
     height: 670px;
     gap: 25px;
-    background-color: white;
     display: flex;
     flex-direction: column;
 
-    img {
-        height: 200px;
-        object-fit: fill;
-        align-self: center;
-    }
+    a {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        gap: 25px;
 
-    .name {
-        align-self: center;
-        text-align: center;
-        font-size: 16px;
-        width: 300px;
-        height: 50px;
-    }
+        img {
+            height: 200px;
+            object-fit: fill;
+            align-self: center;
+        }
 
-    .oldPrice{
-        text-decoration: line-through;
-    }
+        .name {
+            align-self: center;
+            text-align: center;
+            font-size: 16px;
+            width: 300px;
+            height: 50px;
+        }
 
-    .price {
-        align-self: center;
-        font-size: 28px;
+        .oldPrice {
+            text-decoration: line-through;
+            color: var(--oldPrice);
+        }
+
+        .price {
+            align-self: center;
+            font-size: 28px;
+        }
+
+        .tagList {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            width: 250px;
+        }
+
+        .tag {
+            background-color: var(--cardTagBg);
+            color: var(--cardTagText);
+            padding: 5px;
+            border-radius: 50px;
+            font-size: 16px;
+        }
+
+        .topBar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .discount {
+            background-color: var(--cardTagBg);
+            color: var(--cardTagText);
+            padding: 10px;
+            align-self: flex-end;
+        }
+
+        .ratingDisplay {
+            font-size: 24px;
+            display: flex;
+            width: 100%;
+            padding-left: 20px;
+            margin-right: auto;
+            color: gold;
+            -webkit-text-stroke-width: 0.5px;
+            -webkit-text-stroke-color: black;
+        }
     }
 
     .addToCart {
         align-self: center;
         height: 65px;
         border: none;
-        color: white;
-        position: absolute;
+        color: var(--textHover);
         z-index: 0;
         margin-top: 605px;
         width: 340px;
         font-size: 18px;
-        background: linear-gradient(45deg, #db6600 0%,#db6600 28%,#ffd269 99%,#ffd269 100%);
-    }
-
-    .tagList {
-        display: flex;
-        gap: 10px;
-        justify-content: center;
-        align-items: center;
-        flex-wrap: wrap;
-        width: 250px;
-    }
-
-    .tag {
-        background-color: #ff7700;
-        padding: 5px;
-        color: white;
-        border-radius: 50px;
-        font-size: 16px;
-    }
-
-    .topBar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
-    }
-
-    .discount {
-        background-color: #ff7700;
-        color: white;
-        padding: 10px;
-        align-self: flex-end;
-    }
-
-    .ratingDisplay {
-        font-size: 24px;
-        display: flex;
-        width: 100%;
-        padding-left: 20px;
-        margin-right: auto;
-        color: gold;
-        -webkit-text-stroke-width: 0.5px;
-        -webkit-text-stroke-color: black;
+        background: var(--cardButtonBg);
+        margin-top: auto; /* pushes button to bottom naturally */
     }
 }
 
@@ -122,8 +131,8 @@
     }
 
     .productCard .addToCart:hover {
-        background: white;
-        border: 2px solid #FF7700;
-        color: #FF7700;
+        background: var(--cardBgHover);
+        border: 2px solid var(--cardButtonHoverBorder);
+        color: var(--cardButtonBgTextHover);
         transition: 0.2s;
     }

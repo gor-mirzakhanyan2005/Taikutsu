@@ -36,21 +36,21 @@ namespace Taikutsu.Server.Controllers
 
                 var guid = Guid.NewGuid();
 
-                var createCart = new NpgsqlCommand("insert into public.carts (cartid, useremail, cart) values (@cartid, @useremail, '{}')", connection);
+                var createCart = new NpgsqlCommand("insert into public.carts (cartid, userid, cart) values (@cartid, @userid, '{}') on conflict (userid) do nothing", connection);
                 createCart.Parameters.AddWithValue("cartid", guid);
-                createCart.Parameters.AddWithValue("useremail", request.UserEmail);
+                createCart.Parameters.AddWithValue("userid", request.UserId);
 
                 await createCart.ExecuteNonQueryAsync();
 
                 return Ok(new
                 {
                     CartId = guid,
-                    UserEmail = request.UserEmail
+                    UserId = request.UserId
                 });
             }
-            catch
+            catch(Exception ex)
             {
-                return BadRequest("Failed to create cart");
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -68,8 +68,8 @@ namespace Taikutsu.Server.Controllers
 
                 var jsonCart = JsonSerializer.Serialize(request.Cart);
 
-                var updateCart = new NpgsqlCommand("update carts set cart = @cart where useremail = @useremail", connection);
-                updateCart.Parameters.AddWithValue("useremail", request.UserEmail);
+                var updateCart = new NpgsqlCommand("update carts set cart = @cart where userid = @userid", connection);
+                updateCart.Parameters.AddWithValue("userid", request.UserId);
                 updateCart.Parameters.AddWithValue("cart", jsonCart);
 
                 var rowsAffected = await updateCart.ExecuteNonQueryAsync();
@@ -81,7 +81,7 @@ namespace Taikutsu.Server.Controllers
 
                 return Ok(new
                 {
-                    UserEmail = request.UserEmail,
+                    UserId = request.UserId,
                     Cart = request.Cart
                 });
 

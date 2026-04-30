@@ -24,12 +24,13 @@ namespace Taikutsu.Server.Controllers
         [HttpPost("update")]
         public async Task<IActionResult> Post([FromBody] PreferenceRequest request)
         {
-            string query = 
-             @"insert into userpreferences (useremail, category, score)
-                values(@useremail, @category, 1)
-                on conflict do update
-                set score = userpreferences.score + 1";
+            if (request == null)
+                return BadRequest("Request is null");
 
+            if(request.Id == null || request.Category == null)
+            {
+                return BadRequest("ID or category are null");
+            }
             string connectionString = _configuration.GetConnectionString("DiplomaWorkDB");
 
             try
@@ -37,13 +38,27 @@ namespace Taikutsu.Server.Controllers
                 await using var connection = new NpgsqlConnection(connectionString);
                 await connection.OpenAsync();
 
-                foreach(var category in request.Category)
+                var updatePreference = new NpgsqlCommand(
+                    @"insert into public.userpreferences(userid, category)
+                    values(@userid, @category)
+                    on conflict (userid, category)
+                    do update set score = userpreferences.score + 1
+                    returning score", connection);
+
+                updatePreference.Parameters.AddWithValue("userid", request.Id);
+                updatePreference.Parameters.AddWithValue("category", request.Category);
+
+                var score = (int)await updatePreference.ExecuteScalarAsync();
+
+                return Ok(new
                 {
-
-                }
-            } catch
+                    Id = request.Id,
+                    Category = request.Category,
+                    Score = score
+                });
+            } catch (Exception ex)
             {
-
+                return StatusCode(500, ex.Message);
             }
         }
     }

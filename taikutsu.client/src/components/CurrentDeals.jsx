@@ -1,9 +1,9 @@
 ﻿import styles from '../stylesheets/CurrentDeals.module.scss'
 import { useContext } from 'react';
-import { ProductContext } from '../App';
+import { ProductContext, DarkModeContext } from '../App';
 function CurrentDeals() {
-
-    const products = useContext(ProductContext)
+    const { darkmode } = useContext(DarkModeContext);
+    const {products} = useContext(ProductContext)
 
     const truncate = (text, maxLength) => {
         if (text.length > maxLength) {
@@ -41,7 +41,7 @@ function CurrentDeals() {
     }
 
   return (
-      <div className={styles.currentDealsCont}>
+      <div data-theme={darkmode ? "dark" : "light"} className={styles.currentDealsCont}>
           <h1>Current Deals</h1>
           <ul className={styles.dealList}>
               {products.filter(deal => deal.productDiscount > 20).map(deal => {

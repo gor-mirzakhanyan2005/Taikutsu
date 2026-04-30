@@ -6,11 +6,10 @@ import { useNavigate, Link } from "react-router-dom";
 function Register() {
 
     const [username, setUsername] = useState("");
-    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
 
-    const { user, setUser } = useContext(UserContext);
+    const { setUser, userId } = useContext(UserContext);
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -28,7 +27,7 @@ function Register() {
                 method: "POST",
                 credentials: "include",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ username, email, password })
+                body: JSON.stringify({ username, password })
             });
 
             if (!registrationRes.ok) {
@@ -37,11 +36,15 @@ function Register() {
                 return;
             }
 
+            const userData = await registrationRes.json();
+            console.log(userData);
+            setUser(userData);
+
             const cartRes = await fetch("/api/cart", {
                 method: "POST",
                 credentials: "include",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ cartId: guid, userEmail: email, cart: [] })
+                body: JSON.stringify({ userId: userData.userId , cartId: guid, cart: [] })
             })
 
             if (!cartRes.ok) {
@@ -50,13 +53,9 @@ function Register() {
                 return;
             }
 
-            const userData = await registrationRes.json();
-            console.log(userData);
-            setUser(userData);
             const cartData = await cartRes.json();
             console.log(cartData);
 
-            console.log("Cart created successfully!")
             alert("Registered successfully!")
 
             navigate("/preferences");
@@ -70,12 +69,10 @@ function Register() {
         <>
             <div className={styles.registerBg}>
                 <div className={styles.registerCont}>
+                    <h2>Sign up</h2>
                     <form className={styles.registerForm} onSubmit={handleSubmit} asp-action='Post' asp-controller='Registration'>
                         <label htmlFor="username">Username</label>
                         <input type="text" value={username} onChange={e => setUsername(e.target.value)} name="username" />
-
-                        <label htmlFor="email">Email</label>
-                        <input type="email" value={email} onChange={e => setEmail(e.target.value)} name="email" />
 
                         <label htmlFor="password">Password</label>
                         <input type="password" value={password} onChange={e => setPassword(e.target.value)} name="password" />

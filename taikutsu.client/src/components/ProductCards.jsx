@@ -8,7 +8,7 @@ import { ProductContext } from '../App';
 function ProductCards({searchBar, selectedCategory}) {
 
     const { products } = useContext(ProductContext);
-    const { setCart } = useContext(CartContext);
+    const { cart, setCart } = useContext(CartContext);
 
     const truncate = (text, maxLength) => {
         if (text.length > maxLength) {
@@ -63,8 +63,8 @@ function ProductCards({searchBar, selectedCategory}) {
               {Array.isArray(filteredProducts) && filteredProducts.map((card) => {
                   return (
                       <li key={card.productId}>
-                          <Link to={`productpages/${card.productID}`}>
-                              <div className={styles.productCard}>
+                          <div className={styles.productCard}>
+                              <Link to={`productpages/${card.productID}`}>
                                   <div className={styles.topBar}>
                                       <div className={styles.ratingDisplay}>
                                           {getRating(card.productRating)}
@@ -75,7 +75,7 @@ function ProductCards({searchBar, selectedCategory}) {
                                           </div>
                                           : ''}
                                   </div>
-                                  <img src={`data:image/png;base64,${card.productImage}`} />
+                                  <img src={card.productThumbnail} onError={() => console.log("Failed to load:", card.productThumbnail)} />
                                   <ul className={styles.tagList}>
                                       {card.categories.map(category => {
                                           return (
@@ -88,9 +88,25 @@ function ProductCards({searchBar, selectedCategory}) {
                                   <span className={styles.name}>{truncate(card.productName, 60)}</span>
                                   {card.productDiscount !== 0 ? <p className={styles.oldPrice}>{`$${card.productPrice}`}</p> : <p className={styles.oldPrice}></p>}
                                   <p className={styles.price}>{`$${card.productDiscount !== 0 ? (card.productPrice - (card.productPrice * (card.productDiscount / 100))).toFixed(2) : card.productPrice}`}</p>
-                                  <button className={styles.addToCart} onClick={() => addToCart(card)}>Add to cart</button>
+                                  </Link>
+                              <button className={styles.addToCart} onClick={() => {
+                                  let key = card.productId;
+                                  const thisProduct = cart.find(p => p.productId === card.productId);
+                                  if (thisProduct) {
+                                      setCart(prevCart => (
+                                          prevCart.map(
+                                              product => product.productId === key ? {
+                                                  ...product,
+                                                  count: product.count + 1
+                                              } : product
+                                          )
+                                      ))
+                                  } else {
+                                      addToCart(card);
+                                  }
+                                  
+                              }}>Add to cart</button>
                               </div>
-                          </Link>
                       </li>
                   )
               }) }

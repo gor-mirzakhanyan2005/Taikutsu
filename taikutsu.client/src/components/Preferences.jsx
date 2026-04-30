@@ -1,15 +1,16 @@
 import { useContext, useState } from 'react';
 import styles from '../stylesheets/Preferences.module.scss'
 import { useNavigate } from 'react-router';
-import { UserContext } from '../App';
+import { DarkModeContext, UserContext } from '../App';
 
 function Preferences() {
-
+    const { darkmode } = useContext(DarkModeContext);
     const { user } = useContext(UserContext);
     const [more, setMore] = useState(false);
     const [categories, setCategories] = useState([]);
 
-    const email = user.email;
+    const userid = user.userId;
+    console.log(userid);
 
     const navigate = useNavigate();
 
@@ -24,7 +25,7 @@ function Preferences() {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    email,
+                    userid,
                     categories
                 })
             });
@@ -87,14 +88,14 @@ function Preferences() {
     }
 
   return (
-      <div className={styles.preferencesBg}>
+      <div data-theme={darkmode ? "dark" : "light"} className={styles.preferencesBg}>
           <h1>What are your preferences?</h1>
           <div className={styles.tagListCont}>
               <ul className={styles.tagList}>
-                  {preferenceTags.splice(0, 10).map((tag) => { return <li className={categories.includes(tag.name) ? styles.selectedTag : styles.unselectedTag} onClick={() => toggleCategory(tag)}><span>{tag.name}{tag.emoji}</span></li> }) }
+                  {preferenceTags.slice(0, 10).map((tag) => { return <li className={categories.includes(tag.name) ? styles.selectedTag : styles.unselectedTag} onClick={() => toggleCategory(tag)}><span>{tag.name}{tag.emoji}</span></li> }) }
               </ul>
               {more ? <ul className={styles.tagList}>
-                  {preferenceTags.splice(0, 26).map((tag) => { return <li className={categories.includes(tag.name) ? styles.selectedTag : styles.unselectedTag} onClick={() => toggleCategory(tag)}><span>{tag.name}{tag.emoji}</span></li> })}
+                  {preferenceTags.slice(0, 26).map((tag) => { return <li className={categories.includes(tag.name) ? styles.selectedTag : styles.unselectedTag} onClick={() => toggleCategory(tag)}><span>{tag.name}{tag.emoji}</span></li> })}
               </ul> : " "}
               <button className={styles.showMore} onClick={() => setMore(!more)}>
                   {more ? 'Show Less' : 'Show More'}

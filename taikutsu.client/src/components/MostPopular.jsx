@@ -1,49 +1,10 @@
-﻿import styles from '../stylesheets/MostPopular.module.scss';
+﻿import { useContext } from 'react';
+import styles from '../stylesheets/MostPopular.module.scss';
+import { UserContext } from '../App';
 
 function MostPopular() {
 
-    const dummyMostPopular = [
-        {
-            image: "https://m.media-amazon.com/images/I/81VIte-lt7L._SL1500_.jpg",
-            name: "Spider-Man (2002) / Spider-Man 2 (2004) / Spider-Man 3 (2007) - Set ",
-            description: "Three legendary movies about the Wall Crawler in a single bundle!",
-            price: "37.99",
-            rating: 8,
-            tags: ["Toys", "Accessories"],
-        },
-        {
-            image: "https://m.media-amazon.com/images/I/81VIte-lt7L._SL1500_.jpg",
-            name: "Spider-Man (2002) / Spider-Man 2 (2004) / Spider-Man 3 (2007) - Set ",
-            description: "Three legendary movies about the Wall Crawler in a single bundle!",
-            price: "37.99",
-            rating: 8,
-            tags: ["Toys", "Accessories"],
-        },
-        {
-            image: "https://m.media-amazon.com/images/I/81VIte-lt7L._SL1500_.jpg",
-            name: "Spider-Man (2002) / Spider-Man 2 (2004) / Spider-Man 3 (2007) - Set ",
-            description: "Three legendary movies about the Wall Crawler in a single bundle!",
-            price: "37.99",
-            rating: 10,
-            tags: ["Toys", "Accessories"],
-        },
-        {
-            image: "https://m.media-amazon.com/images/I/81VIte-lt7L._SL1500_.jpg",
-            name: "Spider-Man (2002) / Spider-Man 2 (2004) / Spider-Man 3 (2007) - Set ",
-            description: "Three legendary movies about the Wall Crawler in a single bundle!",
-            price: "37.99",
-            rating: 9,
-            tags: ["Toys", "Accessories"],
-        },
-        {
-            image: "https://m.media-amazon.com/images/I/81VIte-lt7L._SL1500_.jpg",
-            name: "Spider-Man (2002) / Spider-Man 2 (2004) / Spider-Man 3 (2007) - Set ",
-            description: "Three legendary movies about the Wall Crawler in a single bundle!",
-            price: "37.99",
-            rating: 10,
-            tags: ["Toys", "Accessories"],
-        },
-    ]
+    const { products } = useContext(UserContext);
 
     const truncate = (text, maxLength) => {
         if (text.length > maxLength) {
@@ -84,25 +45,25 @@ function MostPopular() {
       <div className={styles.mostPopularBg}>
       <h1>Most popular</h1>
           <ul className={styles.mostPopularList}>
-              {dummyMostPopular.map(item => {
+              {products.filter(product => product.countbought > 1000).map(product => {
                   return (
-                      <li>
+                      <li key={product.productID}>
                           <div className={styles.mostPopularCard}>
-                            <div className={styles.ratingDisplay}>
-                              {getRating(item.rating)}
-                            </div>
-                            <img src={item.image} />
-                            <ul className={styles.tagList}>
-                              {item.tags.map(tag => {
-                                  return (
-                                      <span className={styles.tag}>{tag}</span>
-                                  )
-                              })}
-                            </ul>
-                            <span className={styles.name}>{truncate(item.name, 100)}</span>
-                            <span className={styles.price}>{item.price}</span>
-                            <button className={styles.addToCart}>Add to cart</button>
-                            </div>
+                              <div className={styles.ratingDisplay}>
+                                  {getRating(product.rating)}
+                              </div>
+                              <img src={product.image} />
+                              <ul className={styles.tagList}>
+                                  {product.tags.map(tag => {
+                                      return (
+                                          <span key={tag} className={styles.tag}>{tag}</span>
+                                      )
+                                  })}
+                              </ul>
+                              <span className={styles.name}>{truncate(product.name, 100)}</span>
+                              <span className={styles.price}>{product.price}</span>
+                              <button className={styles.addToCart}>Add to cart</button>
+                          </div>
                       </li>
                   )
               })}
