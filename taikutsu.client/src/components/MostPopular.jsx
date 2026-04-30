@@ -1,49 +1,20 @@
-﻿import styles from '../stylesheets/MostPopular.module.scss';
+﻿import { useContext, useState } from 'react';
+import styles from '../stylesheets/MostPopular.module.scss';
+import { ProductContext, UserContext, DarkModeContext } from '../App';
+import { CartContext } from '../context/CartContext.jsx';
+import { Link } from 'react-router-dom';
+import Pagination from '../components/Pagination';
 
 function MostPopular() {
+    const { cart, setCart } = useContext(CartContext);
+    const { darkmode } = useContext(DarkModeContext);
+    const { userId } = useContext(UserContext);
+    const { products } = useContext(ProductContext);
+    const [currentPage, setCurrentPage] = useState(() => {
+        return JSON.parse(localStorage.getItem('mostpopularpage')) || 1;
+    });
 
-    const dummyMostPopular = [
-        {
-            image: "https://m.media-amazon.com/images/I/81VIte-lt7L._SL1500_.jpg",
-            name: "Spider-Man (2002) / Spider-Man 2 (2004) / Spider-Man 3 (2007) - Set ",
-            description: "Three legendary movies about the Wall Crawler in a single bundle!",
-            price: "37.99",
-            rating: 8,
-            tags: ["Toys", "Accessories"],
-        },
-        {
-            image: "https://m.media-amazon.com/images/I/81VIte-lt7L._SL1500_.jpg",
-            name: "Spider-Man (2002) / Spider-Man 2 (2004) / Spider-Man 3 (2007) - Set ",
-            description: "Three legendary movies about the Wall Crawler in a single bundle!",
-            price: "37.99",
-            rating: 8,
-            tags: ["Toys", "Accessories"],
-        },
-        {
-            image: "https://m.media-amazon.com/images/I/81VIte-lt7L._SL1500_.jpg",
-            name: "Spider-Man (2002) / Spider-Man 2 (2004) / Spider-Man 3 (2007) - Set ",
-            description: "Three legendary movies about the Wall Crawler in a single bundle!",
-            price: "37.99",
-            rating: 10,
-            tags: ["Toys", "Accessories"],
-        },
-        {
-            image: "https://m.media-amazon.com/images/I/81VIte-lt7L._SL1500_.jpg",
-            name: "Spider-Man (2002) / Spider-Man 2 (2004) / Spider-Man 3 (2007) - Set ",
-            description: "Three legendary movies about the Wall Crawler in a single bundle!",
-            price: "37.99",
-            rating: 9,
-            tags: ["Toys", "Accessories"],
-        },
-        {
-            image: "https://m.media-amazon.com/images/I/81VIte-lt7L._SL1500_.jpg",
-            name: "Spider-Man (2002) / Spider-Man 2 (2004) / Spider-Man 3 (2007) - Set ",
-            description: "Three legendary movies about the Wall Crawler in a single bundle!",
-            price: "37.99",
-            rating: 10,
-            tags: ["Toys", "Accessories"],
-        },
-    ]
+    const cards = 12;
 
     const truncate = (text, maxLength) => {
         if (text.length > maxLength) {
@@ -53,62 +24,158 @@ function MostPopular() {
         }
     }
 
+    const popularProducts = products.filter(product => product.productCountBought > 100);
+
+    const lastIndex = currentPage * cards;
+    const firstIndex = lastIndex - cards;
+    const currentRange = popularProducts.slice(firstIndex, lastIndex);
+
     const getRating = (rating) => {
-        switch (rating) {
-            case 0:
-                return <div>☆☆☆☆☆</div>
-            case 1:
+        switch (true) {
+            case rating < 0.5:
                 return <div>⯪☆☆☆☆</div>
-            case 2:
+            case rating < 1:
                 return <div>★☆☆☆☆</div>
-            case 3:
+            case rating < 1.5:
                 return <div>★⯪☆☆☆</div>
-            case 4:
+            case rating < 2:
                 return <div>★★☆☆☆</div>
-            case 5:
+            case rating < 2.5:
                 return <div>★★⯪☆☆</div>
-            case 6:
+            case rating < 3:
                 return <div>★★★☆☆</div>
-            case 7:
+            case rating < 3.5:
                 return <div>★★★⯪☆</div>
-            case 8:
+            case rating < 4:
                 return <div>★★★★☆</div>
-            case 9:
+            case rating < 4.5:
                 return <div>★★★★⯪</div>
-            case 10:
+            case rating === 5:
                 return <div>★★★★★</div>
         }
     }
 
-  return (
-      <div className={styles.mostPopularBg}>
-      <h1>Most popular</h1>
-          <ul className={styles.mostPopularList}>
-              {dummyMostPopular.map(item => {
-                  return (
-                      <li>
-                          <div className={styles.mostPopularCard}>
-                            <div className={styles.ratingDisplay}>
-                              {getRating(item.rating)}
+    const addToCart = async (product) => {
+        console.log("product.categories:", product.categories);
+        console.log("product.Categories:", product.Categories);
+        const newItem = {
+            productID: product.productID,
+            productName: product.productName,
+            productPrice: product.productPrice,
+            productThumbnail: product.productThumbnail,
+            productDiscount: product.productDiscount,
+            categories: product.categories ?? product.Categories,
+            count: 1
+        };
+
+        const newCart = [...cart, newItem];
+        setCart(newCart);
+
+        await fetch("/api/cart", {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ userId, cart: newCart })
+        });
+
+        for (const category of newItem.categories ?? []) {
+            await fetch("/api/preference/update", {
+                method: "POST",
+                credentials: "include",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    Id: userId,
+                    category: category,
+                })
+            });
+        }
+    };
+
+    const convertCategory = (str) => {
+        let splitStr = str.split("-");
+        let partOne = splitStr[0].charAt(0).toUpperCase() + splitStr[0].slice(1);
+        let finalCategory;
+
+        if (splitStr.length > 1) {
+            let partTwo = splitStr[1].charAt(0).toUpperCase() + splitStr[1].slice(1);
+            finalCategory = partOne + " " + partTwo;
+        } else {
+            finalCategory = partOne;
+        }
+
+        return finalCategory;
+    }
+
+    return (
+        <div data-theme={darkmode ? "dark" : "light"} className={styles.mostPopularBg}>
+            <h1>Most popular</h1>
+            <ul className={styles.mostPopularList}>
+                {currentRange.filter(product => product.productCountBought > 100).map(product => {
+                    return (
+                        <li key={product.productID}>
+                            <div className={styles.mostPopularCard}>
+                                <Link to={`/productpages/${product.productID}`}>
+                                    <div className={styles.topBar}>
+                                        <div className={styles.ratingDisplay}>
+                                            {getRating(product.productRating)}
+                                        </div>
+                                        {product.productDiscount !== 0 ?
+                                            <div className={styles.discount}>
+                                                {`-${product.productDiscount}%`}
+                                            </div>
+                                            : ''}
+                                    </div>
+                                    <img src={product.productThumbnail} onError={() => console.log("Failed to load:", product.productThumbnail)} />
+                                    <div className={styles.tag}>
+                                        {convertCategory(product.categories)}
+                                    </div>
+                                    <span className={styles.name}>{truncate(product.productName, 60)}</span>
+                                    {product.productDiscount !== 0 ? <p className={styles.oldPrice}>{`$${product.productPrice}`}</p> : <p className={styles.oldPrice}></p>}
+                                    <p className={styles.price}>{`$${product.productDiscount !== 0 ? (product.productPrice - (product.productPrice * (product.productDiscount / 100))).toFixed(2) : product.productPrice}`}</p>
+                                </Link>
+                                <button className={styles.addToCart} onClick={async () => {
+                                    let key = product.productID;
+                                    const thisProduct = cart.find(p => p.productID === key);
+
+                                    if (thisProduct) {
+                                        const updatedCart = cart.map(
+                                            product => product.productID === key ? {
+                                                ...product,
+                                                count: product.count + 1
+                                            } : product
+                                        );
+                                        setCart(updatedCart);
+
+                                        await fetch("/api/cart", {
+                                            method: "PUT",
+                                            headers: { "Content-Type": "application/json" },
+                                            credentials: "include",
+                                            body: JSON.stringify({ userId, cart: updatedCart })
+                                        });
+
+                                        for (const category of product.categories ?? []) {
+                                            await fetch("/api/preference/update", {
+                                                method: "POST",
+                                                credentials: "include",
+                                                headers: { "Content-Type": "application/json" },
+                                                body: JSON.stringify({
+                                                    Id: userId,
+                                                    category: category,
+                                                })
+                                            });
+                                        }
+                                    } else {
+                                        await addToCart(product);
+                                    }
+                                }}>Add to cart</button>
                             </div>
-                            <img src={item.image} />
-                            <ul className={styles.tagList}>
-                              {item.tags.map(tag => {
-                                  return (
-                                      <span className={styles.tag}>{tag}</span>
-                                  )
-                              })}
-                            </ul>
-                            <span className={styles.name}>{truncate(item.name, 100)}</span>
-                            <span className={styles.price}>{item.price}</span>
-                            <button className={styles.addToCart}>Add to cart</button>
-                            </div>
-                      </li>
-                  )
-              })}
-          </ul>
-      </div>
-  );
+                        </li>
+                    )
+                })}
+            </ul>
+            <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} displayItems={currentRange} pageKey='mostpopularpage' />
+        </div>
+    );
 }
 
 export default MostPopular;

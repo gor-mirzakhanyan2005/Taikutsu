@@ -6,11 +6,12 @@
     gap: 20px;
     justify-content: center;
     align-items: center;
-    background-image: url('../assets/TaikutsuPattern(2).png'), linear-gradient(45deg, #ff7700 0%,#ffe30e 99%,#ffe30e 100%,#ffe30e 100%,#ffd500 100%);
+    background-image: var(--bg);
+    background-color: var(--bgColor);
 }
 
 .itemListCont {
-    background-color: white;
+    background-color: var(--cartContainer);
     width: 70vw;
     display: flex;
     justify-content: center;
@@ -30,8 +31,9 @@
         align-items: center;
 
         .cartItemCard {
-            background-color: white;
-            border: 2px solid black;
+            background-color: var(--cartContainer);
+            border: 2px solid var(--cartCardBorder);
+            color: var(--auxText);
             display: flex;
             justify-content: start;
             gap: 40px;
@@ -61,12 +63,12 @@
                     height: 50px;
 
                     .increment {
-                        border: 2px solid white;
+                        border: 2px solid var(--tagBg);
                         font-size: 24px;
                         display: flex;
                         align-items: center;
                         justify-content: center;
-                        background-color: #ff7700;
+                        background-color: var(--cartCardBorder);
                         width: 35px;
                         text-align: center;
                         height: 35px;
@@ -75,12 +77,12 @@
                     }
 
                     .decrement {
-                        border: 2px solid white;
+                        border: 2px solid var(--tagBg);
                         font-size: 24px;
                         display: flex;
                         align-items: center;
                         justify-content: center;
-                        background-color: #ff7700;
+                        background-color: var(--cartCardBorder);
                         width: 35px;
                         text-align: center;
                         height: 35px;
@@ -102,8 +104,8 @@
                 }
 
                 .removeItem {
-                    background-color: #ff7700;
-                    color: white;
+                    background-color: var(--cartCardBorder);
+                    color: var(--auxReverse);
                     width: 150px;
                     align-self: center;
                     border: none;
@@ -117,8 +119,8 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                background-color: #ff7700;
-                color: white;
+                background-color: var(--cartCardBorder);
+                color: var(--auxReverse);
                 width: 100px;
                 height: 100px;
                 font-size: 24px;
@@ -127,7 +129,7 @@
     }
 }
 
-.subtotalAndCheckout{
+.subtotalAndCheckout {
     padding-top: 40px;
     width: 20vw;
     gap: 10px;
@@ -135,13 +137,26 @@
     flex-direction: column;
     display: flex;
     align-items: center;
-    background-color: white;
+    background-color: var(--cartContainer);
 
-    .subtotal{
+    .subtotal {
         font-size: 24px;
+        color: var(--auxText);
     }
 
-    .subtotalNumber{
+    .subtotalNumber {
         font-size: 36px;
+        color: var(--auxText);
+    }
+
+    .checkout{
+        background-color: var(--miscButton);
+        padding: 15px 70px;
+        font-size: 14px;
+        font-weight: bold;
+        border-radius: 500px;
+        border: none;
+        color: var(--auxReverse);
+        margin-top: 300px;
     }
 }

@@ -20,12 +20,11 @@ namespace Taikutsu.Server.Controllers
             _configuration = configuration;
         }
 
-        private string GenerateJwtToken(Guid userId, string email)
+        private string GenerateJwtToken(string userId)
         {
             var claims = new[]
             {
-                new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
-                new Claim(ClaimTypes.Name, email)
+                new Claim(ClaimTypes.NameIdentifier, userId),
             };
 
             var key = new SymmetricSecurityKey(
@@ -44,51 +43,57 @@ namespace Taikutsu.Server.Controllers
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
-
-
-        [HttpGet]
-        public async Task<IActionResult> Get()
-        {
-            return Ok();
-        }
-
+        
         [HttpPost]
+        //Метод для авторизації користувача
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            if(string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Password))
+            //Перевірка даних із запиту, відправленого користувачем
+            if (string.IsNullOrEmpty(request.Username) || string.IsNullOrEmpty(request.Password))
             {
-                return BadRequest("Email and password required");
+                return BadRequest("Username and password required");
             }
 
+            //Ключ для з'єднання 
             var connString = _configuration.GetConnectionString("DiplomaWorkDB");
 
+            //Створення самого з'єднання
             await using var connection = new NpgsqlConnection(connString);
+            //Його відкриття
             await connection.OpenAsync();
 
-            var checkUser = new NpgsqlCommand("select userid, username, email, passwordhash, userpreferences, regisdate from public.users where email = @email", connection);
-            checkUser.Parameters.AddWithValue("email", request.Email);
+            //Команда для перевірки даних про користувача через select & where
+            var checkUser = new NpgsqlCommand("select userid, username, passwordhash, userpreferences, regisdate " +
+                "from public.users where username = @username", connection);
+            //Додавання параметрів до команди
+            checkUser.Parameters.AddWithValue("username", request.Username);
 
+            //Переривання виконання асинхронного методу, доки не буде виконана команда
             await using var reader = await checkUser.ExecuteReaderAsync();
 
-            if(!await reader.ReadAsync())
+            // Якщо запит не повернув жодного рядка, користувач із вказаним іменем не існує
+            if (!await reader.ReadAsync())
             {
                 return BadRequest("No such user!");
             }
 
-            var userId = reader.GetGuid(0);
+            //Створюємо змінні для зчитування даних про користувача
+            var userId = reader.GetString(0);
             var username = reader.GetString(1);
-            var email = reader.GetString(2);
-            var passwordHash = reader.GetString(3);
-            var userpreferences = reader.GetFieldValue<string[]>(4);
-            var regisdate = reader.GetDateTime(5);
+            var passwordHash = reader.GetString(2);
+            var userpreferences = reader.GetFieldValue<string[]>(3);
+            var regisdate = reader.GetDateTime(4);
 
+            //Перевірка паролю через BCrypt.Verify
             if (!BCrypt.Net.BCrypt.Verify(request.Password, passwordHash))
             {
                 return BadRequest("Incorrect password.");
             }
 
-            var jwtToken = GenerateJwtToken(userId, email);
+            //Створення токену JWT
+            var jwtToken = GenerateJwtToken(userId);
 
+            //Додавання токену до cookies
             Response.Cookies.Append("jwt", jwtToken, new CookieOptions
             {
                 HttpOnly = true,
@@ -97,14 +102,7 @@ namespace Taikutsu.Server.Controllers
                 Expires = DateTime.UtcNow.AddHours(2)
             });
 
-            return Ok(new
-            {
-                token = jwtToken,
-                email = email,
-                username = username,
-                userpreferences = userpreferences,
-                regisdate = regisdate
-            });
+            return Ok();
             
         }
     }

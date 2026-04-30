@@ -1,7 +1,7 @@
 .pageContainer {
     width: 100vw;
     height: 85vh;
-    background-image: url('../assets/TaikutsuPattern(8).png');
+    background: var(--productPageBg);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -20,26 +20,50 @@
             height: 500.5px;
         }
 
-        .tagsAndOther {
-            ul {
-                display: flex;
-                list-style: none;
-                flex-direction: row;
-                gap: 10px;
+        .thumbnailAndImages {
+            display: flex;
+            width: 550px;
+            align-items: center;
+            flex-direction: column;
+            justify-content: center;
+            padding-left: 50px;
+            padding-bottom: 50px;
 
-                .tag {
-                    color: white;
-                    background-color: #ff7700;
-                    padding: 10px;
-                    border-radius: 25px;
+            .thumbnail {
+                transform: scale(70%)
+            }
+
+            .imageRow {
+                list-style: none;
+                gap: 5px;
+                display: flex;
+                flex-direction: row;
+
+                li img {
+                    width: auto;
+                    height: 155px;
                 }
+            }
+        }
+
+        .tagsAndOther {
+            .tag {
+                color: var(--auxReverse);
+                background-color: var(--productTag);
+                padding: 10px;
+                border-radius: 25px;
+                width: 30%;
+                display: flex;
+                justify-content: center;
             }
 
             h2 {
+                color: var(--auxText);
                 font-size: 48px;
             }
 
             p {
+                color: var(--auxText);
                 font-size: 20px;
                 width: 580px;
             }
@@ -60,7 +84,8 @@
                 align-items: center;
                 justify-content: center;
 
-                span{
+                span {
+                    color: var(--auxText);
                     font-size: 36px;
                 }
 
@@ -69,21 +94,27 @@
                     flex-direction: row;
 
                     button:nth-child(1) {
-                        background-color: #ff7700;
+                        background-color: var(--miscButton);
+                        color: var(--auxReverse);
                         border: none;
                         padding: 10px;
                         border-top-left-radius: 50px;
                         border-bottom-left-radius: 50px;
                         width: 210px;
+                        font-size: 14px;
+                        font-weight: bold;
                         height: 50px;
                     }
 
                     button:nth-child(2) {
-                        background-color: #515151;
-                        border: 2px solid #000000 inset;
+                        color: white;
+                        background-color: var(--goBackButton);
+                        border: 2px solid var(--goBackButton);
                         padding: 10px;
                         border-top-right-radius: 50px;
                         border-bottom-right-radius: 50px;
+                        font-size: 14px;
+                        font-weight: bold;
                         width: 150px;
                         height: 50px;
                         color: white;

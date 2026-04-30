@@ -1,48 +1,118 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import styles from '../stylesheets/ProductPage.module.scss'
-import { ProductContext } from '../App';
-import { useContext } from 'react';
+import { DarkModeContext, ProductContext, UserContext } from '../App';
+import { useContext, useEffect, useState, useRef } from 'react';
 
 function ProductPage() {
-
+    const { darkmode } = useContext(DarkModeContext);
+    let { userId } = useContext(UserContext);
     let navigate = useNavigate();
-    const {products } = useContext(ProductContext);
-
+    const { products } = useContext(ProductContext);
     let { productID } = useParams();
+    const [image, setImage] = useState();
+    const hasUpdatedPreferences = useRef(false);
+
+    const savedProduct = JSON.parse(window.localStorage.getItem('product'));
 
     const product = products.find(
         p => p.productID === parseInt(productID)
     )
+    
+    useEffect(() => {
+        if (product) {
+            localStorage.setItem('product', JSON.stringify(product));
+        }
+    }, [product]);
 
-  return (
-      <div className={styles.pageContainer}>
-          <div className={styles.infoContainer}>
-              <img src={`data:image/png;base64,${product?.productImage}`} />
-              <div className={styles.tagsAndOther}>
-                  <ul>
-                      {product?.categories.map((tag) => {
-                          return (
-                              <li className={styles.tag}>
-                                  {tag}
-                              </li>
-                          )
-                      })}
-                  </ul>
-                  <h2>{product?.productName}</h2>
-                  <p>
-                      {product?.productDescription}
-                  </p>
-                  <div className={styles.priceAndButtons}>
-                      <span>{product?.productPrice}</span>
-                      <div className={styles.buttons}>
-                          <button>Add to Cart</button>
-                          <button onClick={() => navigate(-1)}>Back</button>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </div>
-  );
+    const convertCategory = (str) => {
+        let splitStr = str.split("-");
+        let partOne = splitStr[0].charAt(0).toUpperCase() + splitStr[0].slice(1);
+        let finalCategory;
+
+        if (splitStr.length > 1) {
+            let partTwo = splitStr[1].charAt(0).toUpperCase() + splitStr[1].slice(1);
+            finalCategory = partOne + " " + partTwo;
+        } else {
+            finalCategory = partOne;
+        }
+
+        return finalCategory;
+    }
+
+    useEffect(() => {
+        //Перевірка наявності ідентифікатора користувача
+        if (!userId) return;
+        //Перевірка наявності товару
+        if (!product) return;
+        //Перевірка того, чи були вже відновлені уподобання (через useRef)
+        if (hasUpdatedPreferences.current) return;
+
+        //Функція асинхронного звернення до бази даних
+        const updatePreferences = async () => {
+                await fetch("/api/preference/update", {
+                    method: "POST",
+                    credentials: "include",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        Id: userId,
+                        category: product.categories,
+                    })
+                });
+        }
+        updatePreferences();
+    }, [userId, product])
+
+
+    useEffect(() => {
+        if (product) {
+            setImage(product.productImages[0]);
+        } else {
+            setImage(savedProduct.productImages[0]);
+        }
+    }, [product]);
+
+    if (!product) {
+        return <div>Loading...</div>
+    }
+
+    return (
+        <div data-theme={ darkmode ? "dark" : "light" } className={styles.pageContainer}>
+            <div className={styles.infoContainer}>
+                <div className={styles.thumbnailAndImages}>
+                    <img className={styles.thumbnail} src={image} />
+                    <ul className={styles.imageRow}>
+                        {product ? product.productImages.map((url, i) => (
+                            <li key={i} onClick={() => setImage(url)}>
+                                <img src={url} />
+                            </li>
+                        )) :
+                            savedProduct.productImages.map((url, i) => (
+                                <li key={i} onClick={() => setImage(url)}>
+                                    <img src={url} />
+                                </li>
+                            ))
+                        }
+                    </ul>
+                </div>
+                <div className={styles.tagsAndOther}>
+                    <div className={styles.tag}>{convertCategory(product.categories)}</div>
+                    <h2>{product ? product.productName : savedProduct.productName}</h2>
+                    <p>
+                        {product  ? product.productDescription : savedProduct.productDescription}
+                    </p>
+                    <div className={styles.priceAndButtons}>
+                        <span>${product ? product.productPrice - (product.productPrice * (product.productDiscount / 100)) : savedProduct.productPrice - (savedProduct.productPrice * (savedProduct.productDiscount / 100))}</span>
+                        <div className={styles.buttons}>
+                            <button>Add to Cart</button>
+                            <button onClick={() => navigate(-1)}>Back</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
 }
 
 export default ProductPage;

@@ -16,17 +16,18 @@ namespace Taikutsu.Server.Controllers
     {
 
         private readonly IConfiguration _configuration;
+        private readonly IWebHostEnvironment _env;
 
-        public ProductController(IConfiguration configuration)
+        public ProductController(IConfiguration configuration, IWebHostEnvironment env)
         {
             _configuration = configuration;
+            _env = env;
         }
-
 
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            string query = @"select * from Products";
+            string query = @"select * from APIProducts";
             string connectionString = _configuration.GetConnectionString("DiplomaWorkDB");
 
             try
@@ -38,19 +39,20 @@ namespace Taikutsu.Server.Controllers
 
                 using var reader = await cmd.ExecuteReaderAsync();
 
-                while(await reader.ReadAsync())
+                while (await reader.ReadAsync())
                 {
                     products.Add(new ProductModel
                     {
-                        ProductID = reader.GetInt32(0),
-                        ProductName = reader.GetString(1),
-                        ProductDescription = reader.GetString(2),
-                        ProductImage = reader.GetFieldValue<byte[]>(3),
-                        ProductPrice = reader.GetFloat(4),
-                        ProductDiscount = reader.GetInt32(5),
-                        ProductRating = reader.GetInt32(6),
-                        ProductCountBought = reader.GetInt32(7),
-                        Categories = reader.GetFieldValue<string[]>(8)
+                        ProductID = reader.GetInt32(reader.GetOrdinal("productid")),
+                        ProductName = reader.GetString(reader.GetOrdinal("productname")),
+                        ProductDescription = reader.GetString(reader.GetOrdinal("productdescription")),
+                        ProductThumbnail = reader.GetString(reader.GetOrdinal("productthumbnail")),
+                        ProductImages = reader.GetFieldValue<string[]>(reader.GetOrdinal("productimages")),
+                        Categories = reader.GetString(reader.GetOrdinal("productcategories")),
+                        ProductRating = reader.GetInt32(reader.GetOrdinal("productrating")),
+                        ProductCountBought = reader.GetInt32(reader.GetOrdinal("productcountbought")),
+                        ProductPrice = reader.GetInt32(reader.GetOrdinal("productprice")),
+                        ProductDiscount = reader.GetInt32(reader.GetOrdinal("productdiscount")),
                     }
                     );
                 }

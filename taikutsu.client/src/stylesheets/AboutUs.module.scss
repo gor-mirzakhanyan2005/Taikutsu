@@ -5,10 +5,10 @@
     gap: 30px;
     align-items: center;
     flex-direction: column;
-    background-image: url('../assets/TaikutsuPattern(2).png'), linear-gradient(45deg, #ff7700 0%,#ffe30e 99%,#ffe30e 100%,#ffe30e 100%,#ffd500 100%);
+    background-image: var(--bg);
+    background-color: var(--bgColor);
 
-
-    div{
+    div {
         background-color: white;
         width: 400px;
         height: 400px;
@@ -18,7 +18,7 @@
         align-items: center;
         border-radius: 500px;
 
-        img{
+        img {
             width: 200px;
         }
     }
@@ -26,6 +26,7 @@
     p {
         width: 1000px;
         font-size: 24px;
+        color: var(--auxText);
 
         span {
             color: #ffe30e;

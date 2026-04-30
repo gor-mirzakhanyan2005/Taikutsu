@@ -1,0 +1,44 @@
+.pageWidget {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    list-style: none;
+}
+
+.pageButton {
+    background-color: rgb(255, 106, 0);
+    width: 75px;
+    height: 40px;
+    border: none;
+    color: white;
+    border-radius: 50px;
+    cursor: pointer;
+}
+
+.pageButtonInvis {
+    background-color: white;
+    color: white;
+    width: 75px;
+    height: 40px;
+    border: none;
+    border-radius: 50px;
+}
+
+.pageNumber {
+    background-color: rgb(255, 106, 0);
+    color: white;
+    border: none;
+    width: 50px;
+    height: 40px;
+    text-align: center;
+    padding-top: 2.5px;
+    border-radius: 50px;
+    margin-bottom: 50px;
+}
+
+.pageNumblet {
+    width: 20px;
+    height: 20px;
+    background-color: rgb(255, 106, 0);
+}

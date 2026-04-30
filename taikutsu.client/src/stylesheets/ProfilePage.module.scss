@@ -86,3 +86,60 @@
         }
     }
 }
+
+.noProfileBackground{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    background-image: var(--bg);
+    background-color: var(--bgColor);
+
+    .noProfileContainer{
+        width: 50vw;
+        height: 60vh;
+        background-color: var(--noProfileBg);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 100px;
+        flex-direction: column;
+        gap: 80px;
+
+        h2{
+            color: var(--auxText);
+        }
+
+        .signInOrUp{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            width: 50%;
+            gap: 50px;
+
+            button{
+                background-color: var(--profileButton);
+                width: 200px;
+                height: 40px;
+                text-align: center;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 5000px;
+                font-size: 14px;
+                font-weight: bold;
+            }
+
+            span{
+                font-weight: bold;
+                color: var(--auxText);
+
+                a{
+                    text-decoration: none;
+                    color: var(--importantText);
+                }
+            }
+        }
+    }
+}

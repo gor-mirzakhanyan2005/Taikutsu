@@ -2,13 +2,42 @@ import { useContext, useState } from 'react';
 import styles from '../stylesheets/Cart.module.scss';
 import { useEffect } from 'react';
 import { CartContext } from '../context/CartContext';
-import {UserContext} from '../App.jsx'
+import { DarkModeContext, UserContext } from '../App.jsx'
+import { useNavigate } from 'react-router-dom';
 
 function Cart() {
-
-    const { user } = useContext(UserContext)
+    const navigate = useNavigate();
+    const { darkmode } = useContext(DarkModeContext);
+    const { userId } = useContext(UserContext)
     const {cart, setCart} = useContext(CartContext);
     const [subtotal, setSubtotal] = useState(0);
+    const [isHydrated, setIsHydrated] = useState(false);
+
+    useEffect(() => {
+        if (!userId) return;
+
+        const fetchCart = async () => {
+            try {
+                const res = await fetch(`/api/cart?userId=${userId}`, {
+                    method: "GET",
+                    credentials: "include"
+                });
+
+                if (!res.ok) return;
+
+                const data = await res.json();
+                console.log("Raw cart response:", data);
+                console.log("Cart array:", data.cart);
+
+                setIsHydrated(true);
+                setCart(data.cart ?? []);
+            } catch (err) {
+                console.error(err);
+            }
+        };
+
+        fetchCart();
+    }, [userId]);
 
     const handleIncrement = (id) => {
         const newArray = cart.map((item) => {
@@ -40,38 +69,46 @@ function Cart() {
         setCart(newArray);
     }
 
-    useEffect(() => {
-        const updateCart = async () => {
-            try {
-                const updateRes = await fetch("/api/cart", {
-                    method: "PUT",
-                    credentials: "include",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        userEmail: user.email,
-                        cart: cart.map(item => ({
-                            productID: item.productID,
-                            productName: item.productName,
-                            count: item.count
-                        })),
-                        categories: cart.map(item => ({
-                            categories: item.categories
-                        }))
-                    })
-                })
+    const handleCheckout = () => {
+        if (!userId) return;
+        if (cart.length == 0) return;
 
-                if (!updateRes.ok) {
-                    const text = await updateRes.text();
-                    alert(text);
-                    return;
-                }
-            } catch (err) {
-                console.error(err);
+        console.log("First cart item:", cart[0]);
+        const categories = [...new Set(cart.flatMap(item => item.categories))]
+        console.log("Categories to update:", categories);
+
+        const updatePreferences = async () => {
+            for (const category of categories) {
+                await fetch("/api/preference/update", {
+                    method: "POST",
+                    credentials: "include",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        Id: userId,
+                        category: category,
+                    })
+                });
             }
         }
+        updatePreferences();
+        navigate('/checkout');
+    }
 
-        updateCart();
-    }, [cart, user.email])
+    useEffect(() => {
+        if (!isHydrated) return;
+
+        const timeout = setTimeout(() => {
+            fetch("/api/cart", {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ userId, cart })
+            });
+        }, 400);
+
+        return () => clearTimeout(timeout);
+    }, [cart, userId, isHydrated]);
 
     useEffect(() => {
         const findSubtotal = () => {
@@ -99,14 +136,14 @@ function Cart() {
     }, [cart])
 
   return (
-      <div className={styles.cartBg}>
+      <div data-theme={darkmode ? "dark" : "light"} className={styles.cartBg}>
           <div className={styles.itemListCont}>
               <ul className={styles.itemList}>
                   {cart.map(item => {
                       return (
-                          <li key={item.productId}>
+                          <li key={item.productID}>
                               <div className={styles.cartItemCard}>
-                                  <img src={`data:image/png;base64,${item.productImage}`} />
+                                  <img src={item.productThumbnail} />
                                   <div className={styles.itemBlock}>
                                       <span className={styles.name}>{item.productName}</span>
                                       <div className={styles.counter}>
@@ -126,6 +163,7 @@ function Cart() {
           <div className={styles.subtotalAndCheckout}>
               <span className={styles.subtotal}>Subtotal:</span>
               <span className={styles.subtotalNumber}>{subtotal}</span>
+              {cart.length > 0 && <button onClick={handleCheckout} className={styles.checkout}>Proceed to Checkout</button>}
           </div>
       </div>
   );

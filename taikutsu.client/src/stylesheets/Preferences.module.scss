@@ -4,23 +4,25 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(45deg, #ff7700 0%,#ffe30e 79%,#ffe30e 79%,#ffe30e 100%);
+    background-image: var(--bg);
+    background-color: var(--bgColor);
     flex-direction: column;
 }
 
-.preferencesBg h1{
-    font-size: 64px;
-    margin-bottom: 50px;
-}
+    .preferencesBg h1 {
+        font-size: 64px;
+        margin-bottom: 50px;
+        color: var(--auxText);
+    }
 
-.tagListCont{
+.tagListCont {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-.tagList{
+.tagList {
     margin-top: 25px;
     margin-bottom: 25px;
     width: 900px;
@@ -38,8 +40,8 @@
     border-radius: 50px;
     border: none;
     font-size: 16px;
-    background-color: black;
-    color: white;
+    background-color: var(--confirmPreference);
+    color: var(--auxReverse);
 }
 
 .showMore {
@@ -49,26 +51,26 @@
     border-radius: 50px;
     border: none;
     font-size: 16px;
-    background-color: black;
-    color: white;
+    background-color: var(--confirmPreference);
+    color: var(--auxReverse);
     justify-self: center;
 }
 
 .selectedTag {
     cursor: pointer;
     font-size: 20px;
-    background-color: black;
+    background-color: var(--preferenceSelected);
     padding: 10px;
     border-radius: 25px;
-    color: #FFF;
+    color: var(--preferenceSelectedText);
 }
 
 .unselectedTag {
     cursor: pointer;
     font-size: 20px;
-    background-color: white;
+    background-color: var(--preference);
     padding: 10px;
     border-radius: 25px;
-    border: 2px solid #FF7700;
-    color: #FF7700;
+    border: 2px solid var(--preferenceBorder);
+    color: var(--preferenceText);
 }

@@ -3,8 +3,16 @@ import styles from '../stylesheets/TopView.module.scss'
 import { NavLink } from 'react-router-dom';
 import { ProductContext } from '../App';
 
-function TopNav({ setOpen, setSearchBar }) {
+function TopNav({ open, setOpen, setSearchBar, darkmode, setDarkmode }) {
     const [menuOpen, setMenuOpen] = useState(false);
+
+    useEffect(() => {
+        if (open == true) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+    }) 
   
     useEffect(() => {
         const handleResize = () => {
@@ -20,8 +28,12 @@ function TopNav({ setOpen, setSearchBar }) {
         return () => window.removeEventListener('resize', handleResize);
     }, [])
 
+    useEffect(() => {
+        console.log(darkmode);
+    }, [darkmode])
+
   return (
-      <nav className={styles.navigationMenu}>
+      <nav data-theme={darkmode ? "dark" : "light"} className={styles.navigationMenu}>
           <div className={styles.topBar} />
           <div className={styles.navItems}>
               <ul className={`${styles.navItemsUl} ${menuOpen ? styles.responsive : ''}`}>
@@ -53,8 +65,13 @@ function TopNav({ setOpen, setSearchBar }) {
                           Cart
                       </NavLink>
                   </li>
-                  <li onMouseEnter={() => { window.innerWidth > 1040 ? setOpen(true) : '' }}>
-                      <NavLink to='profile'>Profile</NavLink>
+                  <li onMouseEnter={() => { window.innerWidth > 1040 ? setOpen(prev => !prev) : '' }}>
+                      <NavLink to='/profile'>Profile</NavLink>
+                  </li>
+                  <li className={styles.darkmodeButton}>
+                      <div className={darkmode ? styles.darkmodeOn : styles.darkmodeOff} onClick={() => { setDarkmode(prev => !prev); console.log(darkmode) }}>
+                          <div className={darkmode ? styles.sun : styles.moon }></div>
+                      </div>
                   </li>
               </ul>
 

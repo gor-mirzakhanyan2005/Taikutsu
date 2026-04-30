@@ -1,23 +1,17 @@
-import { Navigate, Outlet,useNavigate } from 'react-router-dom';
+import { Navigate, Outlet} from 'react-router-dom';
 import TopNav from './TopNav';
 import Footer from './Footer';
-import { useContext,
-useState } from 'react';
+import { useState } from 'react';
 import ProductPage from './ProductPage';
 import ProfileModal from './ProfileModal';
 import { UserContext } from '../App';
 
-function MainLayout({setSearchBar}) {
-    const { user } = useContext(UserContext);
+function MainLayout({setSearchBar, darkmode, setDarkmode}) {
     const [open, setOpen] = useState(false);
-
-    if (!user) {
-       return <Navigate to="/login" replace/>
-    }
 
   return (
       <div>
-          <TopNav open={open} setOpen={setOpen} setSearchBar={setSearchBar} />
+          <TopNav open={open} setOpen={setOpen} setSearchBar={setSearchBar} darkmode={darkmode} setDarkmode={setDarkmode}/>
           {open == true ? <ProfileModal open={open} setOpen={setOpen} /> : ' '}
           <Outlet />
           <Footer />

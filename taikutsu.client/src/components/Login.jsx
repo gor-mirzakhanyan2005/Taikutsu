@@ -6,7 +6,7 @@ import { UserContext } from "../App";
 
 function Login() {
 
-    const [email, setEmail] = useState("");
+    const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [repeatPassword, setRepeatPassword] = useState("");
 
@@ -29,7 +29,7 @@ function Login() {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                email,
+                username,
                 password
             })
         });
@@ -55,9 +55,10 @@ function Login() {
         <>
             <div className={styles.loginBg}>
                 <div className={styles.loginCont}>
+                    <h2>Sign in</h2>
                     <form className={styles.loginForm} onSubmit={handleLogin} asp-action='Post' asp-controller='Login'>
-                        <label for="email">Email</label>
-                        <input type="email" name="email" onChange={e => setEmail(e.target.value)}/>
+                        <label for="username">Username</label>
+                        <input type="username" name="username" onChange={e => setUsername(e.target.value)}/>
 
                         <label for="password">Password</label>
                         <input type="password" name="password" onChange={e => setPassword(e.target.value)}/>

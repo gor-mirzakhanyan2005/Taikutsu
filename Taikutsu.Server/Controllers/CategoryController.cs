@@ -34,9 +34,9 @@ namespace Taikutsu.Server.Controllers
             await using var connection = new NpgsqlConnection(connString);
             await connection.OpenAsync();
 
-            var insertCategories = new NpgsqlCommand("update users set userpreferences = @userpreferences where email = @email returning email, userpreferences", connection);
+            var insertCategories = new NpgsqlCommand("update users set userpreferences = @userpreferences where userid = @userid returning userid, userpreferences", connection);
             insertCategories.Parameters.AddWithValue("userpreferences", request.categories);
-            insertCategories.Parameters.AddWithValue("email", request.email);
+            insertCategories.Parameters.AddWithValue("userid", request.userid);
 
             await using var reader = await insertCategories.ExecuteReaderAsync();
 
@@ -45,12 +45,12 @@ namespace Taikutsu.Server.Controllers
                 return BadRequest("No such user!");
             }
 
-            var email = reader.GetString(0);
+            var userid = reader.GetFieldValue<string>(0);
             var categories = reader.GetFieldValue<string[]>(1);
 
             return Ok(new
             {
-                email = email,
+                userid = userid,
                 categories = categories
             });
         }

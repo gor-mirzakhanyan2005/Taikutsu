@@ -1,0 +1,25 @@
+.checkoutCont {
+    background-image: var(--bg);
+    background-color: var(--bgColor);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 80vh;
+    flex-direction: column;
+    gap: 200px;
+
+    h2 {
+        font-size: 36px;
+        color: var(--auxText);
+    }
+
+    button {
+        background-color: var(--goBackButton);
+        color: white;
+        padding: 20px 150px;
+        border-radius: 500px;
+        border: none;
+        font-size: 18px;
+    }
+}
