@@ -7,6 +7,10 @@
     display: flex;
     flex-direction: column;
     gap: 150px;
+<<<<<<< HEAD
+=======
+    padding-bottom: 100px;
+>>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
     background-image: var(--bg);
     background-color: var(--bgColor);
 
@@ -17,6 +21,14 @@
 }
 
 .mostPopularList {
+<<<<<<< HEAD
+=======
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+>>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
     list-style: none;
     display: flex;
     justify-content: space-evenly;
@@ -37,9 +49,16 @@
     margin-top: 20px;
     margin-bottom: 20px;
     transition: 0.1s;
+<<<<<<< HEAD
     width: 300px;
     height: 630px;
     gap: 25px;
+=======
+    width: 340px;
+    height: 670px;
+    transition: 0.1s;
+    gap: 38px;
+>>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
     display: flex;
     flex-direction: column;
 
@@ -51,6 +70,7 @@
         flex-direction: column;
         gap: 25px;
 
+<<<<<<< HEAD
         img {
             height: 200px;
             object-fit: fill;
@@ -107,6 +127,20 @@
             -webkit-text-stroke-width: 0.5px;
             -webkit-text-stroke-color: black;
         }
+=======
+    .name {
+        align-self: center;
+        text-align: center;
+        font-size: 16px;
+        width: 300px;
+        color: var(--auxText);
+    }
+
+    .price {
+        align-self: center;
+        font-size: 28px;
+        color: var(--auxText);
+>>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
     }
 
     .addToCart {
@@ -117,7 +151,35 @@
         width: 300px;
         font-size: 18px;
         background: var(--cardButtonBg);
+<<<<<<< HEAD
         margin-top: auto;
+=======
+    }
+
+    .tagList {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .tag {
+        background-color: var(--cardTagBg);
+        padding: 5px;
+        color: var(--cardTagText);
+        border-radius: 50px;
+        font-size: 16px;
+    }
+
+    .ratingDisplay {
+        font-size: 24px;
+        display: flex;
+        width: 100%;
+        padding-left: 20px;
+        color: gold;
+        -webkit-text-stroke-width: 0.5px;
+        -webkit-text-stroke-color: black;
+>>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
     }
 }
 
@@ -126,9 +188,18 @@
         transition: 0.1s;
     }
 
+<<<<<<< HEAD
     .mostPopularCard .addToCart:hover {
         background: var(--cardBgHover);
         border: 2px solid var(--cardButtonHoverBorder);
         color: var(--cardButtonBgTextHover);
         transition: 0.2s;
+=======
+        .addToCart:hover {
+            background: var(--cardBg);
+            border: 2px solid var(--cardButtonBgTextHover);
+            color: var(--cardButtonBgTextHover);
+            transition: 0.2s;
+        }
+>>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
     }

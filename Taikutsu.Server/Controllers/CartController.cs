@@ -74,16 +74,28 @@ namespace Taikutsu.Server.Controllers
                 //Створення нового ідентифікатору для кошикв
                 var guid = Guid.NewGuid();
 
+<<<<<<< HEAD
                 //Команда для створення кошика
                 var createCart = new NpgsqlCommand("insert into public.carts (cartid, userid, cart) values (@cartid, @userid, '[]') on conflict (userid) do nothing", connection);
                 //Додавання значень до параметрів команди
+=======
+                var createCart = new NpgsqlCommand("insert into public.carts (cartid, userid, cart) values (@cartid, @userid, '{}') on conflict (userid) do nothing", connection);
+>>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
                 createCart.Parameters.AddWithValue("cartid", guid);
                 createCart.Parameters.AddWithValue("userid", request.UserId);
 
                 //Переривання роботи методу до виконання команди
                 await createCart.ExecuteNonQueryAsync();
 
+<<<<<<< HEAD
                 return Ok();
+=======
+                return Ok(new
+                {
+                    CartId = guid,
+                    UserId = request.UserId
+                });
+>>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
             }
             catch(Exception ex)
             {
@@ -109,12 +121,16 @@ namespace Taikutsu.Server.Controllers
                 //Серіалізація об'єкту, який надсилає клієнт, у формат JSON
                 var jsonCart = JsonSerializer.Serialize(request.Cart);
 
+<<<<<<< HEAD
                 //Команда адля відновлення кошика
                 var updateCart = new NpgsqlCommand(
                     "update carts set cart = @cart where userid = @userid",
                     connection);
 
                 //Додавання параметрів до команди
+=======
+                var updateCart = new NpgsqlCommand("update carts set cart = @cart where userid = @userid", connection);
+>>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
                 updateCart.Parameters.AddWithValue("userid", request.UserId);
                 updateCart.Parameters.AddWithValue("cart", jsonCart);
 
@@ -135,7 +151,16 @@ namespace Taikutsu.Server.Controllers
                 }
                    
 
+<<<<<<< HEAD
                 return Ok();
+=======
+                return Ok(new
+                {
+                    UserId = request.UserId,
+                    Cart = request.Cart
+                });
+
+>>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
             }
             catch (Exception ex)
             {

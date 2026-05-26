@@ -1,9 +1,15 @@
+<<<<<<< HEAD
 ﻿import { useContext, useState } from 'react';
 import styles from '../stylesheets/MostPopular.module.scss';
 import { ProductContext, UserContext, DarkModeContext } from '../App';
 import { CartContext } from '../context/CartContext.jsx';
 import { Link } from 'react-router-dom';
 import Pagination from '../components/Pagination';
+=======
+﻿import { useContext } from 'react';
+import styles from '../stylesheets/MostPopular.module.scss';
+import { UserContext } from '../App';
+>>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
 
 function MostPopular() {
     const { cart, setCart } = useContext(CartContext);
@@ -14,7 +20,11 @@ function MostPopular() {
         return JSON.parse(localStorage.getItem('mostpopularpage')) || 1;
     });
 
+<<<<<<< HEAD
     const cards = 12;
+=======
+    const { products } = useContext(UserContext);
+>>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
 
     const truncate = (text, maxLength) => {
         if (text.length > maxLength) {
@@ -55,6 +65,7 @@ function MostPopular() {
         }
     }
 
+<<<<<<< HEAD
     const addToCart = async (product) => {
         console.log("product.categories:", product.categories);
         console.log("product.Categories:", product.Categories);
@@ -176,6 +187,37 @@ function MostPopular() {
             <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} displayItems={currentRange} pageKey='mostpopularpage' />
         </div>
     );
+=======
+  return (
+      <div className={styles.mostPopularBg}>
+      <h1>Most popular</h1>
+          <ul className={styles.mostPopularList}>
+              {products.filter(product => product.countbought > 1000).map(product => {
+                  return (
+                      <li key={product.productID}>
+                          <div className={styles.mostPopularCard}>
+                              <div className={styles.ratingDisplay}>
+                                  {getRating(product.rating)}
+                              </div>
+                              <img src={product.image} />
+                              <ul className={styles.tagList}>
+                                  {product.tags.map(tag => {
+                                      return (
+                                          <span key={tag} className={styles.tag}>{tag}</span>
+                                      )
+                                  })}
+                              </ul>
+                              <span className={styles.name}>{truncate(product.name, 100)}</span>
+                              <span className={styles.price}>{product.price}</span>
+                              <button className={styles.addToCart}>Add to cart</button>
+                          </div>
+                      </li>
+                  )
+              })}
+          </ul>
+      </div>
+  );
+>>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
 }
 
 export default MostPopular;

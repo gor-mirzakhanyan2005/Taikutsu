@@ -14,7 +14,12 @@ function ProductCards({ searchBar, selectedCategory }) {
         return JSON.parse(localStorage.getItem('maincurrentpage')) || 1;
     });
 
+<<<<<<< HEAD
     const cards = 12;
+=======
+    const { products } = useContext(ProductContext);
+    const { cart, setCart } = useContext(CartContext);
+>>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
 
     const truncate = (text, maxLength) => {
         if (text.length > maxLength) {
@@ -95,6 +100,7 @@ function ProductCards({ searchBar, selectedCategory }) {
         return nameMatch && categoryMatch;
     })
 
+<<<<<<< HEAD
     const convertCategory = (str) => {
         let splitStr = str.split("-");
         let partOne = splitStr[0].charAt(0).toUpperCase() + splitStr[0].slice(1);
@@ -179,6 +185,64 @@ function ProductCards({ searchBar, selectedCategory }) {
             <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} displayItems={filteredProducts} pageKey="maincurrentpage"/>
         </div>
     );
+=======
+  return (
+      <div className={styles.productCardSectionBg}>
+          <ul className={styles.productCardList}>
+              {Array.isArray(filteredProducts) && filteredProducts.map((card) => {
+                  return (
+                      <li key={card.productId}>
+                          <div className={styles.productCard}>
+                              <Link to={`productpages/${card.productID}`}>
+                                  <div className={styles.topBar}>
+                                      <div className={styles.ratingDisplay}>
+                                          {getRating(card.productRating)}
+                                      </div>
+                                      {card.productDiscount !== 0 ?
+                                          <div className={styles.discount}>
+                                              {`-${card.productDiscount}%`}
+                                          </div>
+                                          : ''}
+                                  </div>
+                                  <img src={card.productThumbnail} onError={() => console.log("Failed to load:", card.productThumbnail)} />
+                                  <ul className={styles.tagList}>
+                                      {card.categories.map(category => {
+                                          return (
+                                              <div className={styles.tag}>
+                                                  {category}
+                                              </div>
+                                          )
+                                      })}
+                                  </ul>
+                                  <span className={styles.name}>{truncate(card.productName, 60)}</span>
+                                  {card.productDiscount !== 0 ? <p className={styles.oldPrice}>{`$${card.productPrice}`}</p> : <p className={styles.oldPrice}></p>}
+                                  <p className={styles.price}>{`$${card.productDiscount !== 0 ? (card.productPrice - (card.productPrice * (card.productDiscount / 100))).toFixed(2) : card.productPrice}`}</p>
+                                  </Link>
+                              <button className={styles.addToCart} onClick={() => {
+                                  let key = card.productId;
+                                  const thisProduct = cart.find(p => p.productId === card.productId);
+                                  if (thisProduct) {
+                                      setCart(prevCart => (
+                                          prevCart.map(
+                                              product => product.productId === key ? {
+                                                  ...product,
+                                                  count: product.count + 1
+                                              } : product
+                                          )
+                                      ))
+                                  } else {
+                                      addToCart(card);
+                                  }
+                                  
+                              }}>Add to cart</button>
+                              </div>
+                      </li>
+                  )
+              }) }
+          </ul>
+      </div>
+  );
+>>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
 }
 
 export default ProductCards;

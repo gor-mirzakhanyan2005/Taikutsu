@@ -16,9 +16,14 @@ import { CartContext } from './context/CartContext';
 import Checkout from './components/Checkout';
 
 export const DarkModeContext = createContext();
+<<<<<<< HEAD
 export const RecommendedContext = createContext([]);
 export const ProductContext = createContext([]);
 export const UserContext = createContext();
+=======
+export const ProductContext = createContext([])
+export const UserContext = createContext()
+>>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
 
 function App() {
     const [searchBar, setSearchBar] = useState("");
@@ -28,12 +33,18 @@ function App() {
     const [cart, setCart] = useState([]);
     const [authLoading, setAuthLoading] = useState(true);
     const [darkmode, setDarkmode] = useState(false);
+<<<<<<< HEAD
+=======
+
+    
+>>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
 
     useEffect(() => {
         document.body.classList.toggle('dark', darkmode);
         document.body.classList.toggle('light', !darkmode);
     }, [darkmode]);
 
+<<<<<<< HEAD
     useEffect(() => {
         fetch(`/api/products`)
             .then(res => res.json())
@@ -49,6 +60,8 @@ function App() {
             });
     }, []);
 
+=======
+>>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
     const [anonId] = useState(() => {
         let id = localStorage.getItem("anonid");
 
@@ -93,6 +106,7 @@ function App() {
         <UserContext.Provider value={{ user, setUser, userId }}>
             <DarkModeContext.Provider value={{ darkmode, setDarkmode }}>
                 <CartContext.Provider value={{ cart, setCart }}>
+<<<<<<< HEAD
                     <RecommendedContext.Provider value={{ recommended, setRecommended }}>
                         <ProductContext.Provider value={{ products, setProducts }}>
                             <Routes>
@@ -112,6 +126,25 @@ function App() {
                             </Routes>
                         </ProductContext.Provider>
                     </RecommendedContext.Provider>
+=======
+                    <ProductContext.Provider value={{ products, setProducts }}>
+                        <Routes>
+                            <Route path="/" element={<MainLayout setSearchBar={setSearchBar} darkmode={darkmode} setDarkmode={setDarkmode} />}>
+                                <Route index element={<MainPage searchBar={searchBar} />} />
+                                <Route path="productpages/:productID" element={<ProductPage products={products} />} />
+                                <Route path="currentdeals" element={<CurrentDeals />} />
+                                <Route path="aboutus" element={<AboutUs />} />
+                                <Route path="mostpopular" element={<MostPopular />} />
+                                <Route path="cart" element={<Cart />} />
+                                <Route path="profile" element={<ProfilePage />} />
+                                <Route path="checkout" element={<Checkout /> } />
+                            </Route>
+                            <Route path="/login" element={<Login />} />
+                            <Route path="/register" element={<Register />} />
+                            <Route path="/preferences" element={<Preferences />} />
+                        </Routes>
+                    </ProductContext.Provider>
+>>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
                 </CartContext.Provider>
             </DarkModeContext.Provider>
         </UserContext.Provider>

@@ -1,4 +1,5 @@
 ﻿import styles from '../stylesheets/CurrentDeals.module.scss'
+<<<<<<< HEAD
 import { useContext, useState } from 'react';
 import { ProductContext, DarkModeContext, UserContext } from '../App';
 import { CartContext } from '../context/CartContext';
@@ -15,6 +16,13 @@ function CurrentDeals() {
     });
 
     const cards = 12;
+=======
+import { useContext } from 'react';
+import { ProductContext, DarkModeContext } from '../App';
+function CurrentDeals() {
+    const { darkmode } = useContext(DarkModeContext);
+    const {products} = useContext(ProductContext)
+>>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
 
     const truncate = (text, maxLength) => {
         if (text.length > maxLength) {
@@ -55,6 +63,7 @@ function CurrentDeals() {
         }
     }
 
+<<<<<<< HEAD
     const addToCart = async (product) => {
         console.log("product.categories:", product.categories);
         console.log("product.Categories:", product.Categories);
@@ -176,6 +185,45 @@ function CurrentDeals() {
             <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} displayItems={currentRange} pageKey='dealpage'/>
         </div>
     );
+=======
+  return (
+      <div data-theme={darkmode ? "dark" : "light"} className={styles.currentDealsCont}>
+          <h1>Current Deals</h1>
+          <ul className={styles.dealList}>
+              {products.filter(deal => deal.productDiscount > 20).map(deal => {
+                  return (
+                      <div className={styles.dealCard}>
+                          <div className={styles.topBar}>
+                              <div className={styles.ratingDisplay}>
+                                  {getRating(deal.productRating)}
+                              </div>
+                              {deal.discount !== '0' ? 
+                                <div className={styles.discount}>
+                                      {`-${deal.productDiscount}%` }
+                                </div>
+                               : ''}
+                          </div>
+                          <img src={`data:image/png;base64,${deal.productImage}`} />
+                          <ul className={styles.tagList}>
+                              {deal.categories.map(category => {
+                                  return (
+                                      <span className={styles.tag}>
+                                          {category}
+                                      </span>
+                                  )
+                              }) }
+                          </ul>
+                          <span className={styles.name}>{truncate(deal.productName, 100)}</span>
+                              <span className={styles.oldPrice}>{`${deal.productPrice}`}</span>
+                              <span className={styles.price}>{`$${deal.productDiscount !== 0 ? (deal.productPrice - (deal.productPrice * (deal.productDiscount / 100))).toFixed(2) : deal.productDiscount}`}</span>
+                          <button className={styles.addToCart}>Add to cart</button>
+                      </div>
+                  )
+              }) }
+          </ul>
+      </div>
+  );
+>>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
 }
 
 export default CurrentDeals;

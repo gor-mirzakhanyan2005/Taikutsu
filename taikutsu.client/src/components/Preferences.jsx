@@ -17,6 +17,7 @@ function Preferences() {
     const handleConfirm = async (e) => {
         e.preventDefault();
 
+<<<<<<< HEAD
         for (const category of categories) {
             try {
                 const res = await fetch("/api/preference/update", {
@@ -30,6 +31,20 @@ function Preferences() {
                         category: category.toLowerCase().split(" ").join("-")
                     })
                 });
+=======
+        try {
+            const res = await fetch("/api/category", {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    userid,
+                    categories
+                })
+            });
+>>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
 
                 if (!res.ok) {
                     const text = await res.text();
@@ -92,7 +107,11 @@ function Preferences() {
                   {preferenceTags.slice(0, 10).map((tag) => { return <li className={categories.includes(tag.name) ? styles.selectedTag : styles.unselectedTag} onClick={() => toggleCategory(tag)}><span>{tag.name}{tag.emoji}</span></li> }) }
               </ul>
               {more ? <ul className={styles.tagList}>
+<<<<<<< HEAD
                   {preferenceTags.slice(10, 26).map((tag) => { return <li className={categories.includes(tag.name) ? styles.selectedTag : styles.unselectedTag} onClick={() => toggleCategory(tag)}><span>{tag.name}{tag.emoji}</span></li> })}
+=======
+                  {preferenceTags.slice(0, 26).map((tag) => { return <li className={categories.includes(tag.name) ? styles.selectedTag : styles.unselectedTag} onClick={() => toggleCategory(tag)}><span>{tag.name}{tag.emoji}</span></li> })}
+>>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
               </ul> : " "}
               <button className={styles.showMore} onClick={() => setMore(!more)}>
                   {more ? 'Show Less' : 'Show More'}

@@ -17,7 +17,10 @@
 }
 
 .dealList {
+<<<<<<< HEAD
     list-style: none;
+=======
+>>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
     display: flex;
     justify-content: space-evenly;
     width: 80vw;
@@ -29,7 +32,11 @@
     }
 }
 
+<<<<<<< HEAD
 .productCard {
+=======
+.dealCard {
+>>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
     background-color: var(--cardBg);
     display: flex;
     align-items: center;
@@ -43,7 +50,70 @@
     display: flex;
     flex-direction: column;
 
+<<<<<<< HEAD
     a {
+=======
+    img {
+        height: 200px;
+        object-fit: fill;
+        align-self: center;
+    }
+
+    .name {
+        align-self: center;
+        text-align: center;
+        font-size: 16px;
+        width: 300px;
+        height: 50px;
+        color: var(--auxText);
+    }
+
+    .price {
+        align-self: center;
+        font-size: 28px;
+        color: var(--auxText);
+    }
+
+    .oldPrice {
+        text-decoration: line-through;
+        color: var(--oldPrice);
+    }
+
+    .addToCart {
+        align-self: center;
+        height: 65px;
+        border: none;
+        color: white;
+        position: absolute;
+        z-index: 0;
+        margin-top: 605px;
+        width: 340px;
+        font-size: 18px;
+        background: var(--cardButtonBg);
+    }
+
+    .tagList {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        width: 250px;
+    }
+
+    .tag {
+        background-color: var(--cardTagBg);
+        padding: 5px;
+        color: var(--cardTagText);
+        border-radius: 50px;
+        font-size: 16px;
+    }
+
+    .topBar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+>>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
         width: 100%;
         height: 100%;
         display: flex;
@@ -126,9 +196,18 @@
         transition: 0.1s;
     }
 
+<<<<<<< HEAD
     .productCard .addToCart:hover {
         background: var(--cardBgHover);
         border: 2px solid var(--cardButtonHoverBorder);
         color: var(--cardButtonBgTextHover);
         transition: 0.2s;
+=======
+        .addToCart:hover {
+            background: var(--cardBg);
+            border: 2px solid var(--cardButtonBgTextHover);
+            color: var(--cardButtonBgTextHover);
+            transition: 0.2s;
+        }
+>>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
     }

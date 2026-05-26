@@ -72,6 +72,50 @@ function Cart() {
     const handleCheckout = () => {
         if (!userId) return;
         if (cart.length == 0) return;
+<<<<<<< HEAD
+=======
+
+        const categories = [...new Set(cart.flatMap(item => item.categories))]
+
+        const updatePreferences = async () => {
+            for (const category of categories) {
+                await fetch("/api/preference/update", {
+                    method: "POST",
+                    credentials: "include",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        Id: userId,
+                        category: category,
+                    })
+                });
+            }
+        }
+        updatePreferences();
+        navigate('/checkout');
+    }
+
+    useEffect(() => {
+        const updateCart = async () => {
+            try {
+                const updateRes = await fetch("/api/cart", {
+                    method: "PUT",
+                    credentials: "include",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        userId: userId,
+                        cart: cart.map(item => ({
+                            productID: item.productID,
+                            productName: item.productName,
+                            count: item.count
+                        })),
+                        categories: cart.map(item => ({
+                            categories: item.categories
+                        }))
+                    })
+                })
+>>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
 
         console.log("First cart item:", cart[0]);
         const categories = [...new Set(cart.flatMap(item => item.categories))]
@@ -96,6 +140,7 @@ function Cart() {
         navigate('/checkout');
     }
 
+<<<<<<< HEAD
     useEffect(() => {
         if (!isHydrated) return;
 
@@ -109,6 +154,10 @@ function Cart() {
 
         return () => clearTimeout(timeout);
     }, [cart, userId, isHydrated]);
+=======
+        updateCart();
+    }, [cart, userId])
+>>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
 
     useEffect(() => {
         const findSubtotal = () => {
@@ -143,7 +192,11 @@ function Cart() {
                       return (
                           <li key={item.productID}>
                               <div className={styles.cartItemCard}>
+<<<<<<< HEAD
                                   <img src={item.productThumbnail} />
+=======
+                                  <img src={`data:image/png;base64,${item.productThumbnail}`} />
+>>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
                                   <div className={styles.itemBlock}>
                                       <span className={styles.name}>{item.productName}</span>
                                       <div className={styles.counter}>
@@ -163,7 +216,11 @@ function Cart() {
           <div className={styles.subtotalAndCheckout}>
               <span className={styles.subtotal}>Subtotal:</span>
               <span className={styles.subtotalNumber}>{subtotal}</span>
+<<<<<<< HEAD
               {cart.length > 0 && <button onClick={handleCheckout} className={styles.checkout}>Proceed to Checkout</button>}
+=======
+              {cart.length > 0 && <button onClick={() => handleCheckout} className={styles.checkout}>Proceed to Checkout</button>}
+>>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
           </div>
       </div>
   );

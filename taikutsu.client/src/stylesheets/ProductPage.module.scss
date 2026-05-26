@@ -28,6 +28,7 @@
             justify-content: center;
             padding-left: 50px;
             padding-bottom: 50px;
+<<<<<<< HEAD
 
             .thumbnail {
                 transform: scale(70%)
@@ -42,6 +43,38 @@
                 li img {
                     width: auto;
                     height: 155px;
+=======
+
+            .thumbnail {
+                transform: scale(70%)
+            }
+
+            .imageRow {
+                list-style: none;
+                gap: 5px;
+                display: flex;
+                flex-direction: row;
+
+                li img {
+                    width: auto;
+                    height: 155px;
+                }
+            }
+        }
+
+        .tagsAndOther {
+            ul {
+                display: flex;
+                list-style: none;
+                flex-direction: row;
+                gap: 10px;
+
+                .tag {
+                    color: var(--auxReverse);
+                    background-color: var(--productTag);
+                    padding: 10px;
+                    border-radius: 25px;
+>>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
                 }
             }
         }

@@ -1,12 +1,20 @@
 ﻿import styles from '../stylesheets/MainPage.module.scss';
 import ProductCards from './ProductCards';
 import { useState, useEffect, useContext } from 'react';
+<<<<<<< HEAD
 import { RecommendedContext, UserContext, DarkModeContext } from '../App';
+=======
+import { ProductContext, UserContext, DarkModeContext } from '../App';
+>>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
 
 function MainPage({ searchBar }) {
     const [selectedCategory, setSelectedCategory] = useState("");
 
+<<<<<<< HEAD
     const { setRecommended } = useContext(RecommendedContext);
+=======
+    const { setProducts } = useContext(ProductContext);
+>>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
     const { userId } = useContext(UserContext);
     const { darkmode } = useContext(DarkModeContext);
 
@@ -40,7 +48,11 @@ function MainPage({ searchBar }) {
     useEffect(() => {
         if (!userId) return;
 
+<<<<<<< HEAD
         fetch(`/api/recommended?userId=${userId}`)
+=======
+        fetch(`/api/products/recommended?userId=${userId}`)
+>>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
             .then(res => res.json())
             .then(data => {
                 if (data.length === 0) {
@@ -50,7 +62,11 @@ function MainPage({ searchBar }) {
             })
             .then(finalData => {
                 finalData.forEach(p => p.count = 1);
+<<<<<<< HEAD
                 setRecommended(finalData);
+=======
+                setProducts(finalData);
+>>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
             });
 
         console.log(userId);

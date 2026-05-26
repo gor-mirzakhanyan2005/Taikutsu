@@ -48,8 +48,12 @@ namespace Taikutsu.Server.Controllers
         //Метод для авторизації користувача
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
+<<<<<<< HEAD
             //Перевірка даних із запиту, відправленого користувачем
             if (string.IsNullOrEmpty(request.Username) || string.IsNullOrEmpty(request.Password))
+=======
+            if(string.IsNullOrEmpty(request.Username) || string.IsNullOrEmpty(request.Password))
+>>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
             {
                 return BadRequest("Username and password required");
             }
@@ -62,10 +66,14 @@ namespace Taikutsu.Server.Controllers
             //Його відкриття
             await connection.OpenAsync();
 
+<<<<<<< HEAD
             //Команда для перевірки даних про користувача через select & where
             var checkUser = new NpgsqlCommand("select userid, username, passwordhash, userpreferences, regisdate " +
                 "from public.users where username = @username", connection);
             //Додавання параметрів до команди
+=======
+            var checkUser = new NpgsqlCommand("select userid, username, passwordhash, userpreferences, regisdate from public.users where username = @username", connection);
+>>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
             checkUser.Parameters.AddWithValue("username", request.Username);
 
             //Переривання виконання асинхронного методу, доки не буде виконана команда
@@ -77,7 +85,10 @@ namespace Taikutsu.Server.Controllers
                 return BadRequest("No such user!");
             }
 
+<<<<<<< HEAD
             //Створюємо змінні для зчитування даних про користувача
+=======
+>>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
             var userId = reader.GetString(0);
             var username = reader.GetString(1);
             var passwordHash = reader.GetString(2);
@@ -90,7 +101,10 @@ namespace Taikutsu.Server.Controllers
                 return BadRequest("Incorrect password.");
             }
 
+<<<<<<< HEAD
             //Створення токену JWT
+=======
+>>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
             var jwtToken = GenerateJwtToken(userId);
 
             //Додавання токену до cookies
@@ -102,7 +116,18 @@ namespace Taikutsu.Server.Controllers
                 Expires = DateTime.UtcNow.AddHours(2)
             });
 
+<<<<<<< HEAD
             return Ok();
+=======
+            return Ok(new
+            {
+                userId = userId,
+                token = jwtToken,
+                username = username,
+                userpreferences = userpreferences,
+                regisdate = regisdate
+            });
+>>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
             
         }
     }
