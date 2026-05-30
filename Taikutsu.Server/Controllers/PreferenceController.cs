@@ -19,7 +19,6 @@ namespace Taikutsu.Server.Controllers
         [HttpPost("update")]
         public async Task<IActionResult> Post([FromBody] PreferenceRequest request)
         {
-<<<<<<< HEAD
             //Перевірка на наявність запиту
             if (request == null)
                 return BadRequest("Request is null");
@@ -31,15 +30,6 @@ namespace Taikutsu.Server.Controllers
             }
 
             //Ключ з'єднання до БД
-=======
-            if (request == null)
-                return BadRequest("Request is null");
-
-            if(request.Id == null || request.Category == null)
-            {
-                return BadRequest("ID or category are null");
-            }
->>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
             string connectionString = _configuration.GetConnectionString("DiplomaWorkDB");
 
             //Спроба відновити дані про уподобання
@@ -50,33 +40,24 @@ namespace Taikutsu.Server.Controllers
                 //Відкриття з'єднання
                 await connection.OpenAsync();
 
-<<<<<<< HEAD
+
                 //Запит для відновлення даних про уподобання, повертає score
-=======
->>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
                 var updatePreference = new NpgsqlCommand(
-                    @"insert into public.userpreferences(userid, category)
-                    values(@userid, @category)
+                    @"insert into public.userpreferences(userid, category, score)
+                    values(@userid, @category, @weight)
                     on conflict (userid, category)
-                    do update set score = userpreferences.score + 1
+                    do update set score = userpreferences.score + @weight
                     returning score", connection);
 
-<<<<<<< HEAD
                 //Додавання параметрів ідентифікатору та категорії
                 updatePreference.Parameters.AddWithValue("userid", request.Id);
                 updatePreference.Parameters.AddWithValue("category", request.Category);
+                updatePreference.Parameters.AddWithValue("weight", request.Weight);
 
                 //Бали для категорії, отримуються через виконання запиту
                 var score = (int)await updatePreference.ExecuteScalarAsync();
 
                 //Повертаємо дані
-=======
-                updatePreference.Parameters.AddWithValue("userid", request.Id);
-                updatePreference.Parameters.AddWithValue("category", request.Category);
-
-                var score = (int)await updatePreference.ExecuteScalarAsync();
-
->>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
                 return Ok(new
                 {
                     Id = request.Id,
@@ -85,10 +66,99 @@ namespace Taikutsu.Server.Controllers
                 });
             } catch (Exception ex)
             {
-<<<<<<< HEAD
                 //При невдалому виконанні алгоритму, відправляємо повідомлення з кодом 500
-=======
->>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPost("delete")]
+        //Метод для видалення даних
+        public async Task<IActionResult> Delete([FromBody] PreferenceDeletionRequest request) {
+            //Перевірка на коректність запиту
+            if (request == null) return BadRequest("Request is null");
+
+            //Перевірка на наявність ідентифікатору користувача
+            if (request.userId == null)
+            {
+                return BadRequest("userId is null");
+            }
+
+            //Ключ для з'єднання з базою даних
+            string connectionString = _configuration.GetConnectionString("DiplomaWorkDB");
+
+            //Спроба провести процес видалення
+            try
+            {
+                //Створення змінної зі з'єднанням
+                await using var connection = new NpgsqlConnection(connectionString);
+                //Відкриття з'єднання
+                await connection.OpenAsync();
+
+                //Створення самої команди для видалення даних про користувацькі уподобання
+                //в таблиці userpreferences
+                var deleteCmd = new NpgsqlCommand(
+                    @"delete from public.userpreferences where userid = @userid", connection);
+                //Додавання параметру ідентифікатора користувача до команди
+                deleteCmd.Parameters.AddWithValue("userid", request.userId);
+                //Зупинення виконання методу доки не буде виконана команда
+                await deleteCmd.ExecuteNonQueryAsync();
+
+                //Створення команди для видалення даних про уподобання з відповідної колони
+                //з таблиці users
+                var deletePreferencesCmd = new NpgsqlCommand(
+                    @"update public.users set userpreferences = '{}' where userid = @userid", connection);
+                deletePreferencesCmd.Parameters.AddWithValue("userid", request.userId);
+                await deletePreferencesCmd.ExecuteNonQueryAsync();
+
+                //Повертаємо Ok
+                return Ok();
+
+            }
+            //Ловимо помилку та надсилаємо повідомлення з кодом 500
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPost("insert")]
+        //Метод для синхронизації між двома таблицями
+        public async Task<IActionResult> SyncPreferences([FromBody] CategoryInsertRequest request)
+        {
+            //Перевірки на наявність відповідних даних
+            if (request == null)
+                return BadRequest("Request is null");
+
+            if (request.UserId == null)
+                return BadRequest("ID is null");
+
+            string connectionString = _configuration.GetConnectionString("DiplomaWorkDB");
+
+            //Спроба вставити дані з userpreferences у відповідну колону таблиці
+            //users
+            try
+            {
+                await using var connection = new NpgsqlConnection(connectionString);
+                await connection.OpenAsync();
+
+                //Команда для синхронизації
+                var syncCmd = new NpgsqlCommand(
+                    @"update public.users
+                      set userpreferences = (
+                          select array_agg(category order by score desc)
+                          from public.userpreferences
+                          where userid = @userid
+                      )
+                      where userid = @userid",
+                    connection);
+
+                syncCmd.Parameters.AddWithValue("userid", request.UserId);
+                await syncCmd.ExecuteNonQueryAsync();
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
                 return StatusCode(500, ex.Message);
             }
         }

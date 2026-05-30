@@ -1,11 +1,8 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import styles from '../stylesheets/ProductPage.module.scss'
 import { DarkModeContext, ProductContext, UserContext } from '../App';
-<<<<<<< HEAD
 import { useContext, useEffect, useState, useRef } from 'react';
-=======
-import { useContext, useEffect, useState } from 'react';
->>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
+import ProfilePic from '../assets/Twitter_default_profile_400x400.png';
 
 function ProductPage() {
     const { darkmode } = useContext(DarkModeContext);
@@ -14,16 +11,15 @@ function ProductPage() {
     const { products } = useContext(ProductContext);
     let { productID } = useParams();
     const [image, setImage] = useState();
-<<<<<<< HEAD
+
     const hasUpdatedPreferences = useRef(false);
-=======
->>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
 
     const savedProduct = JSON.parse(window.localStorage.getItem('product'));
 
     const product = products.find(
         p => p.productID === parseInt(productID)
     )
+    console.log(product);
     
     useEffect(() => {
         if (product) {
@@ -31,7 +27,6 @@ function ProductPage() {
         }
     }, [product]);
 
-<<<<<<< HEAD
     const convertCategory = (str) => {
         let splitStr = str.split("-");
         let partOne = splitStr[0].charAt(0).toUpperCase() + splitStr[0].slice(1);
@@ -47,6 +42,31 @@ function ProductPage() {
         return finalCategory;
     }
 
+    const getRating = (rating) => {
+        switch (true) {
+            case rating <= 0.5:
+                return <div>⯪☆☆☆☆</div>
+            case rating <= 1:
+                return <div>★☆☆☆☆</div>
+            case rating <= 1.5:
+                return <div>★⯪☆☆☆</div>
+            case rating <= 2:
+                return <div>★★☆☆☆</div>
+            case rating <= 2.5:
+                return <div>★★⯪☆☆</div>
+            case rating <= 3:
+                return <div>★★★☆☆</div>
+            case rating <= 3.5:
+                return <div>★★★⯪☆</div>
+            case rating <= 4:
+                return <div>★★★★☆</div>
+            case rating <= 4.5:
+                return <div>★★★★⯪</div>
+            case rating === 5:
+                return <div>★★★★★</div>
+        }
+    }
+
     useEffect(() => {
         //Перевірка наявності ідентифікатора користувача
         if (!userId) return;
@@ -57,24 +77,7 @@ function ProductPage() {
 
         //Функція асинхронного звернення до бази даних
         const updatePreferences = async () => {
-=======
-    useEffect(() => {
-        if (product) {
-            localStorage.setItem('product', JSON.stringify(product));
-        }
-    }, [product]);
-
-    useEffect(() => {
-        console.log("useEffect triggered");
-        console.log("userId:", userId);
-        console.log("product:", product);
-
-        if (!userId) return;
-        if (!product) return;
-
-        const updatePreferences = async () => {
-            for (const category of product.categories) {
->>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
+            hasUpdatedPreferences.current = true;
                 await fetch("/api/preference/update", {
                     method: "POST",
                     credentials: "include",
@@ -83,21 +86,20 @@ function ProductPage() {
                     },
                     body: JSON.stringify({
                         Id: userId,
-<<<<<<< HEAD
                         category: product.categories,
+                        weight: 1
                     })
                 });
-=======
-                        category: category,
-                    })
-                });
-            }
->>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
+
+            await fetch("/api/preference/insert", {
+                method: "POST",
+                credentials: "include",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ userid: userId })
+            });
         }
         updatePreferences();
     }, [userId, product])
-
-<<<<<<< HEAD
 
     useEffect(() => {
         if (product) {
@@ -111,28 +113,12 @@ function ProductPage() {
         return <div>Loading...</div>
     }
 
-=======
-    useEffect(() => {
-        if (product) {
-            setImage(product.productThumbnail);
-        } else {
-            setImage(savedProduct.productThumbnail)
-        }
-    }, [product]);
-
->>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
     return (
         <div data-theme={ darkmode ? "dark" : "light" } className={styles.pageContainer}>
             <div className={styles.infoContainer}>
                 <div className={styles.thumbnailAndImages}>
                     <img className={styles.thumbnail} src={image} />
                     <ul className={styles.imageRow}>
-<<<<<<< HEAD
-=======
-                        <li onClick={() => setImage(product ? product.productThumbnail : savedProduct.productThumbnail)}>
-                            <img src={product ? product.productThumbnail : savedProduct.productThumbnail} />
-                        </li>
->>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
                         {product ? product.productImages.map((url, i) => (
                             <li key={i} onClick={() => setImage(url)}>
                                 <img src={url} />
@@ -147,35 +133,41 @@ function ProductPage() {
                     </ul>
                 </div>
                 <div className={styles.tagsAndOther}>
-<<<<<<< HEAD
                     <div className={styles.tag}>{convertCategory(product.categories)}</div>
-=======
-                    <ul>
-                        {product?.categories.map((tag) => {
-                            return (
-                                <li className={styles.tag}>
-                                    {tag}
-                                </li>
-                            )
-                        })}
-                    </ul>
->>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
                     <h2>{product ? product.productName : savedProduct.productName}</h2>
                     <p>
                         {product  ? product.productDescription : savedProduct.productDescription}
                     </p>
                     <div className={styles.priceAndButtons}>
-<<<<<<< HEAD
                         <span>${product ? product.productPrice - (product.productPrice * (product.productDiscount / 100)) : savedProduct.productPrice - (savedProduct.productPrice * (savedProduct.productDiscount / 100))}</span>
-=======
-                        <span>{product ? product.productPrice : savedProduct.productPrice}</span>
->>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
                         <div className={styles.buttons}>
                             <button>Add to Cart</button>
                             <button onClick={() => navigate(-1)}>Back</button>
                         </div>
                     </div>
                 </div>
+            </div>
+            <div className={styles.reviewsCont}>
+                <h2>Testimonials</h2>
+                <ul>
+                    {product.productReviews.map((review) => (
+                        <li>
+                            <div className={styles.reviewCard}>
+                                <div className={styles.reviewerInfo}>
+                                    <img src={ProfilePic} />
+                                    <div>
+                                        <span>{review.reviewerName.toLowerCase().split(" ").join("")}</span>
+                                        <span className={styles.date}>{review.date.slice(0, 10)}</span>
+                                    </div>
+                                </div>
+                                <div className={styles.ratingAndComment}>
+                                    {getRating(review.rating)}
+                                    <span>"{review.comment}"</span>
+                                </div>
+                            </div>
+                        </li>
+                    ))}
+                </ul>
             </div>
         </div>
     );

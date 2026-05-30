@@ -27,7 +27,7 @@ namespace Taikutsu.Server.Controllers
             string connectionString = _configuration.GetConnectionString("DiplomaWorkDB");
 
             var apiResponse = await client.GetFromJsonAsync<ApiJson>(
-                "https://dummyjson.com/products?limit=194&select=id,title,description,thumbnail,images,price,discountPercentage,rating,category"
+                "https://dummyjson.com/products?limit=194&select=id,title,description,thumbnail,images,price,discountPercentage,rating,category,reviews"
             );
 
             if (apiResponse == null)
@@ -49,7 +49,8 @@ namespace Taikutsu.Server.Controllers
                     productrating,
                     productdiscount,
                     productcategories,
-                    productcountbought
+                    productcountbought,
+                    productreviews
                     ) VALUES (
                         @productid,
                         @productname,
@@ -60,7 +61,8 @@ namespace Taikutsu.Server.Controllers
                         @productrating,
                         @productdiscount,
                         @productcategories,
-                        @productcountbought
+                        @productcountbought,
+                        @productreviews
                     ) ON CONFLICT (productid) DO UPDATE SET
                         productname       = EXCLUDED.productname,
                         productdescription = EXCLUDED.productdescription,
@@ -70,7 +72,8 @@ namespace Taikutsu.Server.Controllers
                         productrating     = EXCLUDED.productrating,
                         productdiscount   = EXCLUDED.productdiscount,
                         productcategories = EXCLUDED.productcategories,
-                        productcountbought = EXCLUDED.productcountbought", conn);
+                        productcountbought = EXCLUDED.productcountbought,
+                        productreviews = EXCLUDED.productreviews", conn);
 
                 await conn.OpenAsync();
 
@@ -90,6 +93,8 @@ namespace Taikutsu.Server.Controllers
                     command.Parameters.AddWithValue("productdiscount", p.discountPercentage);
                     command.Parameters.AddWithValue("productcategories", p.category);
                     command.Parameters.AddWithValue("productcountbought", countbought);
+                    command.Parameters.AddWithValue("productreviews", NpgsqlTypes.NpgsqlDbType.Jsonb,
+                        System.Text.Json.JsonSerializer.Serialize(p.reviews));
 
                     await command.ExecuteNonQueryAsync();
                 }

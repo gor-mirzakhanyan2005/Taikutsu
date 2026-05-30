@@ -6,13 +6,9 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-<<<<<<< HEAD
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Taikutsu.Server.Data;
-=======
-using Microsoft.Extensions.FileProviders;
->>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,17 +19,17 @@ builder.Services.AddAuthentication(options =>
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(o =>
 {
-    o.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        ValidAudience = builder.Configuration["Jwt:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey
-        (Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = false,
-        ValidateIssuerSigningKey = true
-    };
+o.TokenValidationParameters = new TokenValidationParameters
+{
+    ValidIssuer = builder.Configuration["Jwt:Issuer"],
+    ValidAudience = builder.Configuration["Jwt:Audience"],
+    IssuerSigningKey = new SymmetricSecurityKey
+    (Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+    ValidateIssuer = true,
+    ValidateAudience = true,
+    ValidateLifetime = false,
+    ValidateIssuerSigningKey = true
+};
 
     o.Events = new JwtBearerEvents
     {
@@ -58,7 +54,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddHttpClient();
 builder.Services.AddOpenApi();
-builder.Services.AddDbContext<DatabaseContext>(options => 
+builder.Services.AddDbContext<DatabaseContext>(options =>
     options.UseNpgsql(
         builder.Configuration.GetConnectionString("DiplomaWorkDB")
     )
@@ -72,7 +68,7 @@ builder.Services.AddCors(options =>
                                                   .AllowAnyHeader()
                                                   .AllowAnyMethod()
                                                   .AllowAnyMethod()
-                                                  .AllowCredentials();                                     
+                                                  .AllowCredentials();
                       });
 });
 var app = builder.Build();
@@ -109,3 +105,4 @@ app.MapControllers();
 app.MapFallbackToFile("/index.html");
 
 app.Run();
+

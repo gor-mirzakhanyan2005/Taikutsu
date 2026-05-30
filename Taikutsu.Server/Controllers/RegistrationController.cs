@@ -19,11 +19,7 @@ namespace Taikutsu.Server.Controllers
         {
             _configuration = configuration;
         }
-
-<<<<<<< HEAD
         //Метод для створення токену JWT
-=======
->>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
         private string GenerateJwtToken(string userId)
         {
             //Створення масиву з claims
@@ -58,7 +54,8 @@ namespace Taikutsu.Server.Controllers
         {
 
             //Валідація
-            if (string.IsNullOrEmpty(request.Username) || string.IsNullOrEmpty(request.Password)) {
+            if (string.IsNullOrEmpty(request.Username) || string.IsNullOrEmpty(request.Password))
+            {
                 return BadRequest("Username and password required");
             }
 
@@ -69,13 +66,8 @@ namespace Taikutsu.Server.Controllers
             await connection.OpenAsync();
 
             //Команда для перевірки
-<<<<<<< HEAD
-            var checkUsername = new NpgsqlCommand("select count(*) from public.users where username = @username", 
+            var checkUsername = new NpgsqlCommand("select count(*) from public.users where username = @username",
                 connection);
-=======
-            var checkUsername = new NpgsqlCommand("select count(*) from public.users where username = @username", connection);
->>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
-
             //Параметри команди
             checkUsername.Parameters.AddWithValue("username", request.Username);
 
@@ -83,7 +75,7 @@ namespace Taikutsu.Server.Controllers
             var exists = (long)await checkUsername.ExecuteScalarAsync();
 
             //Якщо є більше ніж 0 строк зі співпадаючими даними
-            if(exists > 0)
+            if (exists > 0)
             {
                 //Повертаємо 400
                 return BadRequest("Username already registered");
@@ -94,19 +86,12 @@ namespace Taikutsu.Server.Controllers
 
             //Змінна з командою для створення нового користувача в БД
             var insertUserCmd = new NpgsqlCommand(
-<<<<<<< HEAD
-                @"insert into public.users (userid, username, passwordhash, regisdate) 
+                 @"insert into public.users (userid, username, passwordhash, regisdate) 
                 values (@UserId, @UserName, @PasswordHash, @RegisDate)",
                 connection
             );
 
             //Створення нового ідентифікатору для користувача
-=======
-                "insert into public.users (userid, username, passwordhash, regisdate) values (@UserId, @UserName, @PasswordHash, @RegisDate)",
-                connection
-            );
-
->>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
             var userId = $"user_{Guid.NewGuid()}";
 
             //Додавання значень до відповідних параметрів команди
@@ -118,10 +103,7 @@ namespace Taikutsu.Server.Controllers
             //Асинхронне виконання команди
             await insertUserCmd.ExecuteNonQueryAsync();
 
-<<<<<<< HEAD
             //Створення токену в відповідній змінні
-=======
->>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
             var jwtToken = GenerateJwtToken(userId.ToString());
 
             //Додавання даних до файлів cookies
@@ -132,17 +114,12 @@ namespace Taikutsu.Server.Controllers
                 SameSite = SameSiteMode.Strict,
                 Expires = DateTime.UtcNow.AddHours(2)
             });
-
-<<<<<<< HEAD
-            return Ok();
-=======
             return Ok(new
             {
                 userId = userId,
                 username = request.Username,
                 token = jwtToken
             });
->>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
         }
     }
 }

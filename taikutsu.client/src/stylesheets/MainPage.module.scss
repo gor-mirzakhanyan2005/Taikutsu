@@ -9,6 +9,16 @@
     background-size: 2000px auto, cover;
     background-repeat: repeat, no-repeat;
     background-position: top left, center;
+
+    @media screen and (max-width: 1040px) {
+        .mainPageBg{
+            background-size: 1000px auto, cover;
+        }
+
+        .tagSearchCont{
+
+        }
+    }
 }
 
 .tagSearchCont {
@@ -19,7 +29,7 @@
     align-content: center;
     padding-top: 15vh;
     padding-bottom: 15vh;
-    width: 1000px;
+    width: 90vw;
     gap: 40px;
 
     h2 {
@@ -42,6 +52,11 @@
         padding: 10px;
         color: var(--tagText);
         border-radius: 25px;
+
+        &.active {
+            background-color: var(--tagHover);
+            color: var(--tagHoverText);
+        }
     }
 
         li:hover {

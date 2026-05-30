@@ -1,9 +1,9 @@
 .pageContainer {
     width: 100vw;
-    height: 85vh;
     background: var(--productPageBg);
     display: flex;
     justify-content: center;
+    flex-direction: column;
     align-items: center;
     padding: 0;
 
@@ -28,7 +28,6 @@
             justify-content: center;
             padding-left: 50px;
             padding-bottom: 50px;
-<<<<<<< HEAD
 
             .thumbnail {
                 transform: scale(70%)
@@ -43,38 +42,6 @@
                 li img {
                     width: auto;
                     height: 155px;
-=======
-
-            .thumbnail {
-                transform: scale(70%)
-            }
-
-            .imageRow {
-                list-style: none;
-                gap: 5px;
-                display: flex;
-                flex-direction: row;
-
-                li img {
-                    width: auto;
-                    height: 155px;
-                }
-            }
-        }
-
-        .tagsAndOther {
-            ul {
-                display: flex;
-                list-style: none;
-                flex-direction: row;
-                gap: 10px;
-
-                .tag {
-                    color: var(--auxReverse);
-                    background-color: var(--productTag);
-                    padding: 10px;
-                    border-radius: 25px;
->>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
                 }
             }
         }
@@ -151,6 +118,102 @@
                         width: 150px;
                         height: 50px;
                         color: white;
+                    }
+                }
+            }
+        }
+    }
+
+    .reviewsCont {
+        background-color: var(--bgColor);
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-top: 100px;
+        padding-bottom: 200px;
+        flex-direction: column;
+
+        h2 {
+            margin-bottom: 100px;
+            font-size: 36px;
+            color: var(--auxText);
+        }
+
+        ul {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            width: 70%;
+            gap: 50px;
+
+            li {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+
+                .reviewCard {
+                    background-color: var(--testimonialBg);
+                    width: 550px;
+                    height: 200px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    flex-direction: column;
+                    padding: 20px;
+                    gap: 15px;
+
+                    .reviewerInfo {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        flex-direction: row;
+                        width: 200px;
+
+                        div {
+                            display: flex;
+                            align-items: center;
+                            flex-direction: column;
+                            height: 60px;
+                            width: 300px;
+
+                            span {
+                                color: var(--auxText);
+                            }
+
+                            .date {
+                                color: var(--date);
+                            }
+                        }
+
+                        img {
+                            width: 60px;
+                        }
+                    }
+
+                    .ratingAndComment {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        flex-direction: column;
+                        gap: 10px;
+                        width: 100%;
+                        margin-top: 10px;
+
+                        div {
+                            font-size: 20px;
+                            letter-spacing: 4px;
+                            color: #ffd800;
+                            -webkit-text-stroke-width: 0.5px;
+                            -webkit-text-stroke-color: black;
+                        }
+
+                        span {
+                            margin-bottom: 20px;
+                            color: var(--auxText);
+                        }
                     }
                 }
             }

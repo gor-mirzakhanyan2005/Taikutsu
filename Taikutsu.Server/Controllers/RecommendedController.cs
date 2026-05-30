@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using Npgsql;
+using System.Text.Json;
 using Taikutsu.Server.Models;
 
 namespace Taikutsu.Server.Controllers
@@ -42,17 +44,7 @@ namespace Taikutsu.Server.Controllers
                     left join userpreferences up
                         on up.category = p.productcategories
                         and up.userid = @userid
-                    group by 
-                        p.productid,
-                        p.productname,
-                        p.productdescription,
-                        p.productthumbnail,
-                        p.productprice,
-                        p.productdiscount,
-                        p.productrating,
-                        p.productcountbought,
-                        p.productcategories,
-                        p.productimages
+                    group by p.productid
                     order by total_score desc, p.productcountbought desc, p.productrating desc
                     limit 194;", conn);
 
@@ -68,18 +60,22 @@ namespace Taikutsu.Server.Controllers
                 //Коли читач відкритий, до списку додаються товари за моделлю ProductModel
                 while (await reader.ReadAsync())
                 {
+                    var reviewsJson = reader.GetString(reader.GetOrdinal("productreviews"));
+
+
                     products.Add(new ProductModel()
                     {
-                        ProductID = reader.GetInt32(0),
-                        ProductName = reader.GetString(1),
-                        ProductDescription = reader.GetString(2),
-                        ProductThumbnail = reader.GetString(3),
-                        ProductImages = reader.GetFieldValue<string[]>(4),
-                        Categories = reader.GetFieldValue<string>(5),
-                        ProductRating = reader.GetInt32(6),
-                        ProductCountBought = reader.GetInt32(7),
-                        ProductPrice = reader.GetInt32(8),
-                        ProductDiscount = reader.GetInt32(9),
+                        ProductID = reader.GetInt32(reader.GetOrdinal("productid")),
+                        ProductName = reader.GetString(reader.GetOrdinal("productname")),
+                        ProductDescription = reader.GetString(reader.GetOrdinal("productdescription")),
+                        ProductThumbnail = reader.GetString(reader.GetOrdinal("productthumbnail")),
+                        ProductImages = reader.GetFieldValue<string[]>(reader.GetOrdinal("productimages")),
+                        Categories = reader.GetString(reader.GetOrdinal("productcategories")),
+                        ProductRating = reader.GetInt32(reader.GetOrdinal("productrating")),
+                        ProductCountBought = reader.GetInt32(reader.GetOrdinal("productcountbought")),
+                        ProductPrice = reader.GetInt32(reader.GetOrdinal("productprice")),
+                        ProductDiscount = reader.GetInt32(reader.GetOrdinal("productdiscount")),
+                        ProductReviews = JsonSerializer.Deserialize<List<ReviewDTO>>(reviewsJson)
                     });
                 }
                 //Повертається список товарів
@@ -88,6 +84,7 @@ namespace Taikutsu.Server.Controllers
             //При невдалій спробі, надсилаємо до клієнту дані про помилку
             catch (Exception ex)
             {
+                Console.WriteLine(ex);
                 return BadRequest(ex.Message);
             }
         }

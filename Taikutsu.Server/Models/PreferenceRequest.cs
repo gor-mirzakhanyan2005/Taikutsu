@@ -5,5 +5,6 @@
         public string Id { get; set; }
         public string Category { get; set; }
         public int Score { get; set; }
+        public int Weight { get; set;  }
     }
 }

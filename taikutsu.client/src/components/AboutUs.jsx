@@ -1,28 +1,10 @@
 import styles from '../stylesheets/AboutUs.module.scss';
 import TaikutsuLogo from '../assets/TaikutsuLogo(2).svg';
-<<<<<<< HEAD
-import { useContext, useEffect } from 'react';
-import { DarkModeContext } from '../App'
-
-function AboutUs() {
-    const { darkmode } = useContext(DarkModeContext);
-
-    useEffect(() => {
-        const importProducts = async () => {
-            const res = await fetch("/api/apiproduct", { method: "POST" });
-            const text = await res.text(); // read as plain text first
-            console.log(text); // see exactly what the server is returning
-            console.log(`${text.message}`);
-        };
-        importProducts();
-    }, [])
-=======
 import { useContext } from 'react';
 import { DarkModeContext } from '../App'
 
 function AboutUs() {
-  const { darkmode } = useContext(DarkModeContext);
->>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
+    const { darkmode } = useContext(DarkModeContext);
 
   return (
       <div data-theme={darkmode ? "dark" : "light"}  className={styles.aboutUsBg}>

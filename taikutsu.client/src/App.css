@@ -43,6 +43,17 @@
     --productTag: #ff7700;
     --miscButton: #ff7700;
     --goBackButton: #bd5800;
+    --testimonialBg: white;
+    --date: #959595;
+    --burgerMenu: #ff7700;
+    --burgerMenuHover: white;
+    --burgerMenuSticks: #ff7700;
+    --burgerMenuSticksHover: #fff;
+    --burgerMenuBg: #fff;
+    --burgerMenuButton: #fff;
+    --burgerMenuButtonHover: #ff7700;
+    --burgerMenuText: #ff7700;
+    --burgerMenuTextHover: #fff;
 }
 
 [data-theme="dark"] {
@@ -90,4 +101,15 @@
     --productTag: #2ed18e;
     --miscButton: #2ed18e;
     --goBackButton: #219867;
+    --testimonialBg: #000000;
+    --date: #2ed18e;
+    --burgerMenu: #2ed18e;
+    --burgerMenuHover: rgba(46, 29, 89, 1);
+    --burgerMenuSticks: #2ed18e;
+    --burgerMenuSticksHover: #2a2a3e;
+    --burgerMenuBg: #000;
+    --burgerMenuButton: #000;
+    --burgerMenuButtonHover: #2ed18e;
+    --burgerMenuText: #2ed18e;
+    --burgerMenuTextHover: #000;
 }

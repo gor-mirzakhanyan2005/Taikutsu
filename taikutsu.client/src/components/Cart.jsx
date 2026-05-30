@@ -9,7 +9,7 @@ function Cart() {
     const navigate = useNavigate();
     const { darkmode } = useContext(DarkModeContext);
     const { userId } = useContext(UserContext)
-    const {cart, setCart} = useContext(CartContext);
+    const { cart, setCart } = useContext(CartContext);
     const [subtotal, setSubtotal] = useState(0);
     const [isHydrated, setIsHydrated] = useState(false);
 
@@ -54,7 +54,7 @@ function Cart() {
     const handleDelete = (id) => {
         const newArray = cart.filter((item) => item.productID !== id);
 
-        setCart(newArray);  
+        setCart(newArray);
     }
 
     const handleDecrement = (id) => {
@@ -72,51 +72,6 @@ function Cart() {
     const handleCheckout = () => {
         if (!userId) return;
         if (cart.length == 0) return;
-<<<<<<< HEAD
-=======
-
-        const categories = [...new Set(cart.flatMap(item => item.categories))]
-
-        const updatePreferences = async () => {
-            for (const category of categories) {
-                await fetch("/api/preference/update", {
-                    method: "POST",
-                    credentials: "include",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        Id: userId,
-                        category: category,
-                    })
-                });
-            }
-        }
-        updatePreferences();
-        navigate('/checkout');
-    }
-
-    useEffect(() => {
-        const updateCart = async () => {
-            try {
-                const updateRes = await fetch("/api/cart", {
-                    method: "PUT",
-                    credentials: "include",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        userId: userId,
-                        cart: cart.map(item => ({
-                            productID: item.productID,
-                            productName: item.productName,
-                            count: item.count
-                        })),
-                        categories: cart.map(item => ({
-                            categories: item.categories
-                        }))
-                    })
-                })
->>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
-
         console.log("First cart item:", cart[0]);
         const categories = [...new Set(cart.flatMap(item => item.categories))]
         console.log("Categories to update:", categories);
@@ -132,15 +87,23 @@ function Cart() {
                     body: JSON.stringify({
                         Id: userId,
                         category: category,
+                        weight: 5
                     })
                 });
             }
+
+            await fetch("/api/preference/insert", {
+                method: "POST",
+                credentials: "include",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ userid: userId })
+            });
         }
+
         updatePreferences();
         navigate('/checkout');
     }
 
-<<<<<<< HEAD
     useEffect(() => {
         if (!isHydrated) return;
 
@@ -154,10 +117,6 @@ function Cart() {
 
         return () => clearTimeout(timeout);
     }, [cart, userId, isHydrated]);
-=======
-        updateCart();
-    }, [cart, userId])
->>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
 
     useEffect(() => {
         const findSubtotal = () => {
@@ -183,46 +142,37 @@ function Cart() {
     useEffect(() => {
         console.log(cart);
     }, [cart])
-
-  return (
-      <div data-theme={darkmode ? "dark" : "light"} className={styles.cartBg}>
-          <div className={styles.itemListCont}>
-              <ul className={styles.itemList}>
-                  {cart.map(item => {
-                      return (
-                          <li key={item.productID}>
-                              <div className={styles.cartItemCard}>
-<<<<<<< HEAD
-                                  <img src={item.productThumbnail} />
-=======
-                                  <img src={`data:image/png;base64,${item.productThumbnail}`} />
->>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
-                                  <div className={styles.itemBlock}>
-                                      <span className={styles.name}>{item.productName}</span>
-                                      <div className={styles.counter}>
-                                          <button className={styles.decrement} onClick={() => handleDecrement(item.productID)}>-</button>
-                                          <div className={styles.countShow}>{item.count}</div>
-                                          <button className={styles.increment} onClick={() => handleIncrement(item.productID)}>+</button>
-                                      </div>
-                                      <button className={styles.removeItem} onClick={() => handleDelete(item.productID)}>Remove item</button>
-                                  </div>
-                                  <span className={styles.itemPrice}>{item.productPrice}</span>
-                              </div>
-                          </li>
-                      )
-                  }) }
-              </ul>
-          </div>
-          <div className={styles.subtotalAndCheckout}>
-              <span className={styles.subtotal}>Subtotal:</span>
-              <span className={styles.subtotalNumber}>{subtotal}</span>
-<<<<<<< HEAD
-              {cart.length > 0 && <button onClick={handleCheckout} className={styles.checkout}>Proceed to Checkout</button>}
-=======
-              {cart.length > 0 && <button onClick={() => handleCheckout} className={styles.checkout}>Proceed to Checkout</button>}
->>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
-          </div>
-      </div>
-  );
-  }
+    return (
+        <div data-theme={darkmode ? "dark" : "light"} className={styles.cartBg}>
+            <div className={styles.itemListCont}>
+                <ul className={styles.itemList}>
+                    {cart.map(item => {
+                        return (
+                            <li key={item.productID}>
+                                <div className={styles.cartItemCard}>
+                                    <img src={item.productThumbnail} />
+                                    <div className={styles.itemBlock}>
+                                        <span className={styles.name}>{item.productName}</span>
+                                        <div className={styles.counter}>
+                                            <button className={styles.decrement} onClick={() => handleDecrement(item.productID)}>-</button>
+                                            <div className={styles.countShow}>{item.count}</div>
+                                            <button className={styles.increment} onClick={() => handleIncrement(item.productID)}>+</button>
+                                        </div>
+                                        <button className={styles.removeItem} onClick={() => handleDelete(item.productID)}>Remove item</button>
+                                    </div>
+                                    <span className={styles.itemPrice}>{item.productPrice}</span>
+                                </div>
+                            </li>
+                        )
+                    })}
+                </ul>
+            </div>
+            <div className={styles.subtotalAndCheckout}>
+                <span className={styles.subtotal}>Subtotal:</span>
+                <span className={styles.subtotalNumber}>{subtotal}</span>
+                {cart.length > 0 && <button onClick={handleCheckout} className={styles.checkout}>Proceed to Checkout</button>}
+            </div>
+        </div>
+    );
+}
 export default Cart;

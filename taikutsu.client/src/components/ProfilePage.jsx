@@ -7,6 +7,7 @@ function ProfilePage() {
     const navigate = useNavigate();
     const { darkmode } = useContext(DarkModeContext);
     const { user, setUser } = useContext(UserContext);
+    console.log(user);
 
     return (
         <>
@@ -36,6 +37,8 @@ function ProfilePage() {
                                 })}
                             </ul>
                         </div>
+                        <button className={styles.signOut} onClick={() => setUser(null) }>Sign Out</button>
+                        <button className={styles.changePreferences} onClick={() => navigate('/preferences')}>Change Preferences</button>
                     </div>
                 </div >) :
                 (

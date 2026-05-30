@@ -11,13 +11,23 @@
         font-size: 48px;
         color: var(--auxText);
     }
+
+    @media screen and (max-width: 1040px) {
+        .productCard {
+            transform: scale(80%);
+        }
+
+        .productCard:hover{
+            transform: scale(85%);
+        }
+    }
 }
 
 .productCardList{
     list-style: none;
     display: flex;
     justify-content: space-evenly;
-    width: 80vw;
+    width: 90vw;
     flex-wrap: wrap;
 
     a{
@@ -72,18 +82,6 @@
             font-size: 28px;
         }
 
-<<<<<<< HEAD
-=======
-        .tagList {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            width: 250px;
-        }
-
->>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
         .tag {
             background-color: var(--cardTagBg);
             color: var(--cardTagText);
@@ -128,11 +126,7 @@
         width: 300px;
         font-size: 18px;
         background: var(--cardButtonBg);
-<<<<<<< HEAD
         margin-top: auto;
-=======
-        margin-top: auto; /* pushes button to bottom naturally */
->>>>>>> 868210d7054466c3f8d446fb4c36d40280a576f5
     }
 }
 
