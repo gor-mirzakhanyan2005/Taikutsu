@@ -54,6 +54,9 @@
     --burgerMenuButtonHover: #ff7700;
     --burgerMenuText: #ff7700;
     --burgerMenuTextHover: #fff;
+    --profileBodyBg: #ffb777;
+    --preferenceTagBg: #ff7700;
+    --pageButton: #ff7700;
 }
 
 [data-theme="dark"] {
@@ -112,4 +115,7 @@
     --burgerMenuButtonHover: #2ed18e;
     --burgerMenuText: #2ed18e;
     --burgerMenuTextHover: #000;
+    --profileBodyBg: #2a2a3e;
+    --preferenceTagBg: #2ed18e;
+    --pageButton: #2ed18e;
 }

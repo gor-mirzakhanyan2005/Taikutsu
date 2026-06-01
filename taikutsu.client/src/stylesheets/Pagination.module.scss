@@ -7,13 +7,14 @@
 }
 
 .pageButton {
-    background-color: rgb(255, 106, 0);
+    background-color: var(--pageButton);
     width: 75px;
     height: 40px;
     border: none;
-    color: white;
+    color: var(--auxReverse);
     border-radius: 50px;
     cursor: pointer;
+    border: 2px solid var(--auxText);
 }
 
 .pageButtonInvis {
@@ -26,8 +27,8 @@
 }
 
 .pageNumber {
-    background-color: rgb(255, 106, 0);
-    color: white;
+    background-color: var(--pageButton);
+    color: var(--auxReverse);
     border: none;
     width: 50px;
     height: 40px;
@@ -35,10 +36,11 @@
     padding-top: 2.5px;
     border-radius: 50px;
     margin-bottom: 50px;
+    border: 2px solid var(--auxText);
 }
 
 .pageNumblet {
     width: 20px;
     height: 20px;
-    background-color: rgb(255, 106, 0);
+    background-color: var(--pageButton);
 }

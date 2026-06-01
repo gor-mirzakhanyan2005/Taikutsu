@@ -1,18 +1,47 @@
 import styles from '../stylesheets/ProfilePage.module.scss';
 import DefaultProfilePic from '../assets/Twitter_default_profile_400x400.png';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { DarkModeContext, UserContext } from '../App';
 import { Link, useNavigate } from 'react-router-dom';
-function ProfilePage() {
+function ProfilePage({ setAuthLoading }) {
     const navigate = useNavigate();
     const { darkmode } = useContext(DarkModeContext);
     const { user, setUser } = useContext(UserContext);
     console.log(user);
 
+    const convertCategory = (str) => {
+        return str
+            .split("-")
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(" ");
+    }
+
+    useEffect(() => {
+        const restoreUser = async () => {
+            try {
+                const res = await fetch("/api/restore/me", {
+                    credentials: "include"
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    setUser(data);
+                }
+            } catch (err) {
+                console.error(err);
+            } finally {
+                console.log("Logged in.")
+                setAuthLoading(false);
+            }
+        };
+
+        restoreUser();
+    }, []);
+
     return (
         <>
             {user ?
-                (<div data-theme={darkmode ? "dark" : "light"}  className={styles.profilePageBg} >
+                (<div data-theme={darkmode ? "dark" : "light"} className={styles.profilePageBg} >
                     <div className={styles.profileBody}>
                         <div className={styles.topSection}>
                             <img src={DefaultProfilePic} />
@@ -21,17 +50,13 @@ function ProfilePage() {
                             </div>
                         </div>
                         <hr />
-                        <div className={styles.registrationDate}>
-                            <span>Registration Date</span>
-                            <span>{user.regisdate}</span>
-                        </div>
-                        <div className={styles.userpreferences}>
+                        <div className={styles.userPreferences}>
                             <span>Your preferences</span>
                             <ul>
                                 {user.userpreferences.map(tag => {
                                     return (
                                         <div className={styles.preferenceTag}>
-                                            {tag}
+                                            {convertCategory(tag)}
                                         </div>
                                     )
                                 })}

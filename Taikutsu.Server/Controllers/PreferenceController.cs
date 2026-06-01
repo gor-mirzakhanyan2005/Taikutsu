@@ -19,6 +19,7 @@ namespace Taikutsu.Server.Controllers
         [HttpPost("update")]
         public async Task<IActionResult> Post([FromBody] PreferenceRequest request)
         {
+            Console.WriteLine($"Category received: '{request.Category}'");
             //Перевірка на наявність запиту
             if (request == null)
                 return BadRequest("Request is null");

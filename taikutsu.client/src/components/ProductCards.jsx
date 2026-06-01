@@ -1,4 +1,4 @@
-﻿import { useContext, useState, useEffect } from 'react';
+﻿import { useContext, useState } from 'react';
 import styles from '../stylesheets/ProductCards.module.scss'
 import { Link } from 'react-router-dom';
 import { CartContext } from '../context/CartContext';
@@ -34,13 +34,7 @@ function ProductCards({ searchBar, selectedCategory }) {
     const firstIndex = lastIndex - cards;
     const currentRange = filteredProducts.slice(firstIndex, lastIndex);
 
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [searchBar, selectedCategory]);
-
     const addToCart = async (product) => {
-        console.log("product.categories:", product.categories);
-        console.log("product.Categories:", product.Categories);
         const newItem = {
             productID: product.productID,
             productName: product.productName,
@@ -61,17 +55,15 @@ function ProductCards({ searchBar, selectedCategory }) {
             body: JSON.stringify({ userId, cart: newCart })
         });
 
-        for (const category of newItem.categories ?? []) {
-            await fetch("/api/preference/update", {
-                method: "POST",
-                credentials: "include",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    Id: userId,
-                    category: category,
-                })
-            });
-        }
+        await fetch("/api/preference/update", {
+            method: "POST",
+            credentials: "include",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                Id: userId,
+                category: newItem.categories,
+            })
+        });
     };
 
     const getRating = (rating) => {
@@ -161,17 +153,15 @@ function ProductCards({ searchBar, selectedCategory }) {
                                             body: JSON.stringify({ userId, cart: updatedCart })
                                         });
 
-                                        for (const category of card.categories ?? []) {
-                                            await fetch("/api/preference/update", {
-                                                method: "POST",
-                                                credentials: "include",
-                                                headers: { "Content-Type": "application/json" },
-                                                body: JSON.stringify({
-                                                    Id: userId,
-                                                    category: category,
-                                                })
-                                            });
-                                        }
+                                        await fetch("/api/preference/update", {
+                                            method: "POST",
+                                            credentials: "include",
+                                            headers: { "Content-Type": "application/json" },
+                                            body: JSON.stringify({
+                                                Id: userId,
+                                                category: card.categories,
+                                            })
+                                        });
                                     } else {
                                         await addToCart(card);
                                     }

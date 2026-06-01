@@ -69,15 +69,17 @@ function Cart() {
         setCart(newArray);
     }
 
-    const handleCheckout = () => {
+    const handleCheckout = async () => {
         if (!userId) return;
         if (cart.length == 0) return;
         console.log("First cart item:", cart[0]);
-        const categories = [...new Set(cart.flatMap(item => item.categories))]
+        const categories = [...new Set(cart.map(item => item.categories))]
         console.log("Categories to update:", categories);
+        console.log(typeof categories[0])
 
         const updatePreferences = async () => {
             for (const category of categories) {
+                console.log("sending:", category)
                 await fetch("/api/preference/update", {
                     method: "POST",
                     credentials: "include",
@@ -100,7 +102,15 @@ function Cart() {
             });
         }
 
-        updatePreferences();
+        await fetch("/api/cart", {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ userId, cart: [] })
+        });
+
+        setCart([]);
+
+        await updatePreferences();
         navigate('/checkout');
     }
 
@@ -160,7 +170,7 @@ function Cart() {
                                         </div>
                                         <button className={styles.removeItem} onClick={() => handleDelete(item.productID)}>Remove item</button>
                                     </div>
-                                    <span className={styles.itemPrice}>{item.productPrice}</span>
+                                    <span className={styles.itemPrice}>${(item.productPrice) * item.count}</span>
                                 </div>
                             </li>
                         )
@@ -169,7 +179,7 @@ function Cart() {
             </div>
             <div className={styles.subtotalAndCheckout}>
                 <span className={styles.subtotal}>Subtotal:</span>
-                <span className={styles.subtotalNumber}>{subtotal}</span>
+                <span className={styles.subtotalNumber}>${subtotal}</span>
                 {cart.length > 0 && <button onClick={handleCheckout} className={styles.checkout}>Proceed to Checkout</button>}
             </div>
         </div>

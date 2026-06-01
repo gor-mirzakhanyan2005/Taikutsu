@@ -10,6 +10,14 @@ function ProfileModal({ setOpen }) {
     const { user, setUser } = useContext(UserContext);
     const navigate = useNavigate();
 
+    const handleSignOut = async () => {
+        await fetch("/api/restore/logout", {
+            method: "POST",
+            credentials: "include"
+        });
+        setUser(null);
+    };
+
     return (
         <div data-theme={darkmode ? "dark" : "light"} className={styles.profileModalBg}>
             <div className={styles.modalBody} onMouseLeave={() => { window.innerWidth > 1040 ? setOpen(prev => !prev) : '' }}>
@@ -20,7 +28,7 @@ function ProfileModal({ setOpen }) {
                                 <img src={ProfilePic} />
                                 <div className={styles.nameAndSignIn}>
                                     <span>{user.username}</span>
-                                    <a onClick={() => setUser(null)}>Sign Out</a>
+                                    <a onClick={handleSignOut}>Sign Out</a>
                                 </div>
                             </div>
                         </>)

@@ -118,7 +118,8 @@ namespace Taikutsu.Server.Controllers
             {
                 userId = userId,
                 username = request.Username,
-                token = jwtToken
+                token = jwtToken,
+                userpreferences = Array.Empty<string>()
             });
         }
     }

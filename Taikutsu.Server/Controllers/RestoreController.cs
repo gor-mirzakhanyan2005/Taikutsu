@@ -18,6 +18,13 @@ namespace Taikutsu.Server.Controllers
             _configuration = configuration;
         }
 
+        [HttpPost("logout")]
+        public IActionResult Logout()
+        {
+            Response.Cookies.Delete("jwt");
+            return Ok();
+        }
+
         [HttpGet("me")]
         public async Task<IActionResult> Me()
         {

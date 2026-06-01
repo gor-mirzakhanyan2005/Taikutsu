@@ -102,7 +102,7 @@ function App() {
                                     <Route path="aboutus" element={<AboutUs />} />
                                     <Route path="mostpopular" element={<MostPopular />} />
                                     <Route path="cart" element={<Cart />} />
-                                    <Route path="profile" element={<ProfilePage />} />
+                                    <Route path="profile" element={<ProfilePage setAuthLoading={setAuthLoading} />} />
                                     <Route path="checkout" element={<Checkout />} />
                                 </Route>
                                 <Route path="/login" element={<Login />} />

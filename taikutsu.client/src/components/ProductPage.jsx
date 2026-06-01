@@ -5,6 +5,7 @@ import { useContext, useEffect, useState, useRef } from 'react';
 import ProfilePic from '../assets/Twitter_default_profile_400x400.png';
 
 function ProductPage() {
+    window.scrollTo(0, 0);
     const { darkmode } = useContext(DarkModeContext);
     let { userId } = useContext(UserContext);
     let navigate = useNavigate();

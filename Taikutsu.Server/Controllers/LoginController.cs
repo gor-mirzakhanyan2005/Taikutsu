@@ -105,7 +105,13 @@ namespace Taikutsu.Server.Controllers
                 Expires = DateTime.UtcNow.AddHours(2)
             });
 
-            return Ok();
+            return Ok(new
+            {
+                userId = userId,
+                username = request.Username,
+                token = jwtToken,
+                userpreferences = userpreferences
+            });
         }
     }
 }
