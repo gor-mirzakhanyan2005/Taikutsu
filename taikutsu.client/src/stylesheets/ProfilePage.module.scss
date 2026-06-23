@@ -12,7 +12,7 @@
         justify-content: center;
         align-items: center;
         flex-direction: column;
-        width: 50vw;
+        width: 50%;
         display: flex;
         align-items: center;
         flex-direction: column;
@@ -22,7 +22,7 @@
 
         .topSection {
             display: flex;
-            justify-content: flex-start;
+            justify-content: center;
             align-items: center;
             gap: 20px;
             width: 700px;
@@ -61,7 +61,7 @@
         }
 
         hr {
-            width: 700px;
+            width: 80%;
         }
 
         .userPreferences {
@@ -81,6 +81,9 @@
                 display: flex;
                 gap: 40px;
                 font-size: 18px;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
 
                 .preferenceTag {
                     background-color: var(--preferenceTagBg);
@@ -169,6 +172,49 @@
                 a{
                     text-decoration: none;
                     color: var(--importantText);
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 1040px) {
+    .profilePageBg {
+        .profileBody {
+            width: 90%;
+
+            hr {
+                width: 400px;
+            }
+
+            .topSection {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 20px;
+                width: 700px;
+
+                img {
+                    width: 120px;
+                }
+
+                .nameAndEmail {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    flex-direction: row;
+                    gap: 10px;
+                    font-size: 24px;
+
+                    span:nth-child(1) {
+                        font-weight: bold;
+                        color: var(--auxText);
+                    }
+
+                    span:nth-child(2) {
+                        opacity: 0.5;
+                        color: var(--auxText);
+                    }
                 }
             }
         }

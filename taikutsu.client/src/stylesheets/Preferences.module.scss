@@ -1,17 +1,22 @@
 .preferencesBg {
     width: 100vw;
-    height: 100vh;
+    min-height: 100vh;
+    overflow-y: auto;
     display: flex;
     justify-content: center;
     align-items: center;
     background-image: var(--bg);
     background-color: var(--bgColor);
     flex-direction: column;
+    padding: 40px 0;
 }
 
     .preferencesBg h1 {
         font-size: 64px;
         margin-bottom: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         color: var(--auxText);
     }
 
@@ -25,7 +30,7 @@
 .tagList {
     margin-top: 25px;
     margin-bottom: 25px;
-    width: 900px;
+    width: 75%;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;

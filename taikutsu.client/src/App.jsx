@@ -14,6 +14,7 @@ import { createContext, useState, useEffect } from 'react';
 import ProductPage from './components/ProductPage';
 import { CartContext } from './context/CartContext';
 import Checkout from './components/Checkout';
+import styles from './stylesheets/Loading.module.scss'
 
 export const DarkModeContext = createContext();
 export const RecommendedContext = createContext([]);
@@ -26,11 +27,14 @@ function App() {
     const [user, setUser] = useState(null);
     const [cart, setCart] = useState([]);
     const [authLoading, setAuthLoading] = useState(true);
-    const [darkmode, setDarkmode] = useState(false);
+    const [darkmode, setDarkmode] = useState(() => {
+        return localStorage.getItem("darkmode") === "true";
+    });
 
     useEffect(() => {
         document.body.classList.toggle('dark', darkmode);
         document.body.classList.toggle('light', !darkmode);
+        localStorage.setItem("darkmode", darkmode);
     }, [darkmode]);
 
     useEffect(() => {
@@ -85,7 +89,11 @@ function App() {
         restoreUser();
     }, []);
 
-    if (authLoading) return <div>Loading...</div>;
+    if (authLoading) return (
+        <div data-theme={darkmode ? "dark" : "light"} className={styles.loadingScreen}>
+            <div className={styles.loadingCircle}></div>
+        </div>
+    );
     console.log(user);
 
     return (

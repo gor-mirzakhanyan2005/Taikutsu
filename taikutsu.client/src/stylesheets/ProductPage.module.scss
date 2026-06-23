@@ -12,8 +12,8 @@
         justify-content: center;
         align-items: center;
         flex-direction: row;
-        width: 80vw;
-        gap: 150px;
+        width: 80%;
+        gap: 5%;
         height: 80vh;
 
         img {
@@ -65,11 +65,11 @@
             p {
                 color: var(--auxText);
                 font-size: 20px;
-                width: 580px;
+                width: 80%;
             }
 
             gap: 20px;
-            width: 100%;
+            width: 80%;
             height: 100%;
             justify-content: center;
             display: flex;
@@ -100,7 +100,7 @@
                         padding: 10px;
                         border-top-left-radius: 50px;
                         border-bottom-left-radius: 50px;
-                        width: 210px;
+                        width: 150%;
                         font-size: 14px;
                         font-weight: bold;
                         height: 50px;
@@ -213,6 +213,128 @@
                         span {
                             margin-bottom: 20px;
                             color: var(--auxText);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 1040px) {
+    .pageContainer {
+
+        .infoContainer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            width: 80vw;
+            height: auto;
+            padding-bottom: 200px;
+
+            img {
+                height: 500.5px;
+            }
+
+            .thumbnailAndImages {
+                display: flex;
+                width: 100%;
+                flex-direction: column;
+                justify-content: center;
+                padding-right: 45px;
+                align-items: center;
+
+                .thumbnail {
+                    transform: scale(70%)
+                }
+
+                .imageRow {
+                    list-style: none;
+                    gap: 5px;
+                    display: flex;
+                    flex-direction: row;
+
+                    li img {
+                        width: auto;
+                        height: 155px;
+                    }
+                }
+            }
+
+            .tagsAndOther {
+                .tag {
+                    color: var(--auxReverse);
+                    background-color: var(--productTag);
+                    padding: 10px;
+                    border-radius: 25px;
+                    width: 30%;
+                    display: flex;
+                    justify-content: center;
+                }
+
+                h2 {
+                    color: var(--auxText);
+                    font-size: 48px;
+                }
+
+                p {
+                    color: var(--auxText);
+                    font-size: 20px;
+                    width: 580px;
+                }
+
+                gap: 20px;
+                width: 100%;
+                height: 100%;
+                justify-content: center;
+                display: flex;
+                flex-direction: column;
+                padding-left: 20px;
+                padding-right: 20px;
+                margin-top: -50px;
+
+                .priceAndButtons {
+                    display: flex;
+                    flex-direction: row;
+                    gap: 40px;
+                    align-items: center;
+                    justify-content: center;
+
+                    span {
+                        color: var(--auxText);
+                        font-size: 36px;
+                    }
+
+                    .buttons {
+                        display: flex;
+                        flex-direction: row;
+
+                        button:nth-child(1) {
+                            background-color: var(--miscButton);
+                            color: var(--auxReverse);
+                            border: none;
+                            padding: 10px;
+                            border-top-left-radius: 50px;
+                            border-bottom-left-radius: 50px;
+                            width: 210px;
+                            font-size: 14px;
+                            font-weight: bold;
+                            height: 50px;
+                        }
+
+                        button:nth-child(2) {
+                            color: white;
+                            background-color: var(--goBackButton);
+                            border: 2px solid var(--goBackButton);
+                            padding: 10px;
+                            border-top-right-radius: 50px;
+                            border-bottom-right-radius: 50px;
+                            font-size: 14px;
+                            font-weight: bold;
+                            width: 150px;
+                            height: 50px;
+                            color: white;
                         }
                     }
                 }

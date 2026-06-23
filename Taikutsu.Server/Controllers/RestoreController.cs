@@ -65,7 +65,7 @@ namespace Taikutsu.Server.Controllers
                 {
                     userId = reader.GetString(0),
                     username = reader.GetString(1),
-                    userpreferences = reader.GetFieldValue<string[]>(2)
+                    userpreferences = reader.IsDBNull(2) ? Array.Empty<string>() : reader.GetFieldValue<string[]>(2)
                 });
             }
             catch

@@ -3,6 +3,7 @@ import styles from '../stylesheets/ProductPage.module.scss'
 import { DarkModeContext, ProductContext, UserContext } from '../App';
 import { useContext, useEffect, useState, useRef } from 'react';
 import ProfilePic from '../assets/Twitter_default_profile_400x400.png';
+import { CartContext } from '../context/CartContext';
 
 function ProductPage() {
     window.scrollTo(0, 0);
@@ -12,6 +13,7 @@ function ProductPage() {
     const { products } = useContext(ProductContext);
     let { productID } = useParams();
     const [image, setImage] = useState();
+    const { cart, setCart } = useContext(CartContext);
 
     const hasUpdatedPreferences = useRef(false);
 
@@ -68,6 +70,54 @@ function ProductPage() {
         }
     }
 
+    const addToCart = async (product) => {
+        const newItem = {
+            productID: product.productID,
+            productName: product.productName,
+            productPrice: product.productPrice,
+            productThumbnail: product.productThumbnail,
+            productDiscount: product.productDiscount,
+            categories: product.categories ?? product.Categories,
+            count: 1
+        };
+
+        const newCart = [...cart, newItem];
+        setCart(newCart);
+
+        await fetch("/api/cart", {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ userId, cart: newCart })
+        });
+
+        const updatePreferences = async () => {
+            await fetch("/api/preference/update", {
+                method: "PUT",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    Id: userId,
+                    category: product.categories,
+                    weight: 1
+                })
+            });
+
+            await fetch("/api/preference/insert", {
+                method: "PUT",
+                credentials: "include",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ userid: userId })
+            });
+        }
+        updatePreferences();
+
+        alert("Added to cart successfuly!");
+        navigate(-1);
+    };
+
     useEffect(() => {
         //Перевірка наявності ідентифікатора користувача
         if (!userId) return;
@@ -80,7 +130,7 @@ function ProductPage() {
         const updatePreferences = async () => {
             hasUpdatedPreferences.current = true;
                 await fetch("/api/preference/update", {
-                    method: "POST",
+                    method: "PUT",
                     credentials: "include",
                     headers: {
                         "Content-Type": "application/json"
@@ -93,7 +143,7 @@ function ProductPage() {
                 });
 
             await fetch("/api/preference/insert", {
-                method: "POST",
+                method: "PUT",
                 credentials: "include",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ userid: userId })
@@ -140,9 +190,41 @@ function ProductPage() {
                         {product  ? product.productDescription : savedProduct.productDescription}
                     </p>
                     <div className={styles.priceAndButtons}>
-                        <span>${product ? product.productPrice - (product.productPrice * (product.productDiscount / 100)) : savedProduct.productPrice - (savedProduct.productPrice * (savedProduct.productDiscount / 100))}</span>
+                        <span>${product ? (product.productPrice - (product.productPrice * (product.productDiscount / 100))).toFixed(2) : savedProduct.productPrice - (savedProduct.productPrice * (savedProduct.productDiscount / 100))}</span>
                         <div className={styles.buttons}>
-                            <button>Add to Cart</button>
+                            <button className={styles.addToCart} onClick={async () => {
+                                let key = product.productID;
+                                const thisProduct = cart.find(p => p.productID === key);
+
+                                if (thisProduct) {
+                                    const updatedCart = cart.map(
+                                        product => product.productID === key ? {
+                                            ...product,
+                                            count: product.count + 1
+                                        } : product
+                                    );
+                                    setCart(updatedCart);
+
+                                    await fetch("/api/cart", {
+                                        method: "PUT",
+                                        headers: { "Content-Type": "application/json" },
+                                        credentials: "include",
+                                        body: JSON.stringify({ userId, cart: updatedCart })
+                                    });
+
+                                    await fetch("/api/preference/update", {
+                                        method: "POST",
+                                        credentials: "include",
+                                        headers: { "Content-Type": "application/json" },
+                                        body: JSON.stringify({
+                                            Id: userId,
+                                            category: product.categories,
+                                        })
+                                    });
+                                } else {
+                                    await addToCart(product);
+                                }
+                            }}>Add to cart</button>
                             <button onClick={() => navigate(-1)}>Back</button>
                         </div>
                     </div>

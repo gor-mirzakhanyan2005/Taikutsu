@@ -81,7 +81,7 @@ function Cart() {
             for (const category of categories) {
                 console.log("sending:", category)
                 await fetch("/api/preference/update", {
-                    method: "POST",
+                    method: "PUT",
                     credentials: "include",
                     headers: {
                         "Content-Type": "application/json"
@@ -95,7 +95,7 @@ function Cart() {
             }
 
             await fetch("/api/preference/insert", {
-                method: "POST",
+                method: "PUT",
                 credentials: "include",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ userid: userId })
@@ -130,7 +130,7 @@ function Cart() {
 
     useEffect(() => {
         const findSubtotal = () => {
-            let newSubtotal = cart.reduce((accumulator, item) => accumulator + (item.productPrice * item.count), 0);
+            let newSubtotal = cart.reduce((accumulator, item) => accumulator + (item.productDiscount !== 0 ? (item.productPrice - (item.productPrice * (item.productDiscount / 100))).toFixed(2) * item.count : item.productPrice * item.count), 0);
             setSubtotal(newSubtotal.toFixed(2));
         }
 
@@ -170,7 +170,7 @@ function Cart() {
                                         </div>
                                         <button className={styles.removeItem} onClick={() => handleDelete(item.productID)}>Remove item</button>
                                     </div>
-                                    <span className={styles.itemPrice}>${(item.productPrice) * item.count}</span>
+                                    <span className={styles.itemPrice}>${item.productDiscount !== 0 ? (item.productPrice - (item.productPrice * (item.productDiscount / 100))).toFixed(2) * item.count : item.productPrice * item.count}</span>
                                 </div>
                             </li>
                         )

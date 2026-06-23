@@ -2,7 +2,7 @@
 import styles from '../stylesheets/ProductCards.module.scss'
 import { Link } from 'react-router-dom';
 import { CartContext } from '../context/CartContext';
-import { RecommendedContext, UserContext } from '../App';
+import { RecommendedContext, UserContext} from '../App';
 import Pagination from '../components/Pagination';
 
 function ProductCards({ searchBar, selectedCategory }) {
@@ -55,15 +55,28 @@ function ProductCards({ searchBar, selectedCategory }) {
             body: JSON.stringify({ userId, cart: newCart })
         });
 
-        await fetch("/api/preference/update", {
-            method: "POST",
-            credentials: "include",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                Id: userId,
-                category: newItem.categories,
-            })
-        });
+        const updatePreferences = async () => {
+            await fetch("/api/preference/update", {
+                method: "PUT",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    Id: userId,
+                    category: product.categories,
+                    weight: 1
+                })
+            });
+
+            await fetch("/api/preference/insert", {
+                method: "PUT",
+                credentials: "include",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ userid: userId })
+            });
+        }
+        updatePreferences();
     };
 
     const getRating = (rating) => {
@@ -153,17 +166,11 @@ function ProductCards({ searchBar, selectedCategory }) {
                                             body: JSON.stringify({ userId, cart: updatedCart })
                                         });
 
-                                        await fetch("/api/preference/update", {
-                                            method: "POST",
-                                            credentials: "include",
-                                            headers: { "Content-Type": "application/json" },
-                                            body: JSON.stringify({
-                                                Id: userId,
-                                                category: card.categories,
-                                            })
-                                        });
+                                        alert("Added to cart successfuly!");
                                     } else {
                                         await addToCart(card);
+
+                                        alert("Added to cart successfuly!");
                                     }
                                 }}>Add to cart</button>
                             </div>

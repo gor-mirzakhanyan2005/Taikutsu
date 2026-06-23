@@ -8,7 +8,6 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Taikutsu.Server.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,7 +42,6 @@ o.TokenValidationParameters = new TokenValidationParameters
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
-// Add services to the container.
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
@@ -51,14 +49,8 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
 });
 
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddHttpClient();
 builder.Services.AddOpenApi();
-builder.Services.AddDbContext<DatabaseContext>(options =>
-    options.UseNpgsql(
-        builder.Configuration.GetConnectionString("DiplomaWorkDB")
-    )
-);
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: MyAllowSpecificOrigins,
@@ -77,18 +69,10 @@ app.UseDefaultFiles();
 app.MapStaticAssets();
 
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
-
-app.UseStaticFiles(new StaticFileOptions
-{
-    FileProvider = new PhysicalFileProvider(
-        Path.Combine(builder.Environment.ContentRootPath, "uploads")),
-    RequestPath = "/uploads"
-});
 
 app.UseHttpsRedirection();
 

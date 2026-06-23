@@ -78,17 +78,28 @@ function CurrentDeals() {
             body: JSON.stringify({ userId, cart: newCart })
         });
 
-        for (const category of newItem.categories ?? []) {
+        const updatePreferences = async () => {
             await fetch("/api/preference/update", {
-                method: "POST",
+                method: "PUT",
                 credentials: "include",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json"
+                },
                 body: JSON.stringify({
                     Id: userId,
-                    category: category,
+                    category: product.categories,
+                    weight: 1
                 })
             });
+
+            await fetch("/api/preference/insert", {
+                method: "PUT",
+                credentials: "include",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ userid: userId })
+            });
         }
+        updatePreferences();
     };
 
     const convertCategory = (str) => {
@@ -152,20 +163,10 @@ function CurrentDeals() {
                                             credentials: "include",
                                             body: JSON.stringify({ userId, cart: updatedCart })
                                         });
-
-                                        for (const category of deal.categories ?? []) {
-                                            await fetch("/api/preference/update", {
-                                                method: "POST",
-                                                credentials: "include",
-                                                headers: { "Content-Type": "application/json" },
-                                                body: JSON.stringify({
-                                                    Id: userId,
-                                                    category: category,
-                                                })
-                                            });
-                                        }
+                                        alert("Added to cart successfuly!");
                                     } else {
                                         await addToCart(deal);
+                                        alert("Added to cart successfuly!");
                                     }
                                 }}>Add to cart</button>
                             </div>

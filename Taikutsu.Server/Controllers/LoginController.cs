@@ -84,7 +84,7 @@ namespace Taikutsu.Server.Controllers
             var userId = reader.GetString(0);
             var username = reader.GetString(1);
             var passwordHash = reader.GetString(2);
-            var userpreferences = reader.GetFieldValue<string[]>(3);
+            var userpreferences = reader.IsDBNull(3) ? Array.Empty<string>() : reader.GetFieldValue<string[]>(3);
             var regisdate = reader.GetDateTime(4);
 
             //Перевірка паролю через BCrypt.Verify

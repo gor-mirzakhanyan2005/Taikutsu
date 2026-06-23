@@ -16,7 +16,7 @@ namespace Taikutsu.Server.Controllers
             _configuration = configuration;
         }
 
-        [HttpPost("update")]
+        [HttpPut("update")]
         public async Task<IActionResult> Post([FromBody] PreferenceRequest request)
         {
             Console.WriteLine($"Category received: '{request.Category}'");
@@ -72,7 +72,7 @@ namespace Taikutsu.Server.Controllers
             }
         }
 
-        [HttpPost("delete")]
+        [HttpPut("delete")]
         //Метод для видалення даних
         public async Task<IActionResult> Delete([FromBody] PreferenceDeletionRequest request) {
             //Перевірка на коректність запиту
@@ -122,7 +122,7 @@ namespace Taikutsu.Server.Controllers
             }
         }
 
-        [HttpPost("insert")]
+        [HttpPut("insert")]
         //Метод для синхронизації між двома таблицями
         public async Task<IActionResult> SyncPreferences([FromBody] CategoryInsertRequest request)
         {

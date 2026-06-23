@@ -46,7 +46,7 @@ function Preferences() {
 
         try {
             const deleteRes = await fetch("/api/preference/delete", {
-                method: "POST",
+                method: "PUT",
                 credentials: "include",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ userId: userid })
@@ -59,7 +59,7 @@ function Preferences() {
 
             for (const value of categories) {
                 const res = await fetch("/api/preference/update", {
-                    method: "POST",
+                    method: "PUT",
                     credentials: "include",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ id: userid, category: value, weight: 10 })
@@ -72,7 +72,7 @@ function Preferences() {
             }
 
             const insertRes = await fetch("/api/preference/insert", {
-                method: "POST",
+                method: "PUT",
                 credentials: "include",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ userid: userid })
