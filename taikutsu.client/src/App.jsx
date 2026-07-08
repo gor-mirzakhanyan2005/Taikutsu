@@ -30,6 +30,7 @@ function App() {
     const [darkmode, setDarkmode] = useState(() => {
         return localStorage.getItem("darkmode") === "true";
     });
+    const [isHydrated, setIsHydrated] = useState(false);
 
     useEffect(() => {
         document.body.classList.toggle('dark', darkmode);
@@ -56,7 +57,7 @@ function App() {
         let id = localStorage.getItem("anonid");
 
         if (!id) {
-            id = crypto.randomUUID();
+            id = "anonid_" + crypto.randomUUID();
             localStorage.setItem("anonid", id)
         }
 
@@ -66,6 +67,32 @@ function App() {
     const userId = user
         ? user.userId
         : `anon_${anonId}`;
+
+    useEffect(() => {
+        if (!userId) return;
+
+        const fetchCart = async () => {
+            try {
+                const res = await fetch(`/api/cart?userId=${userId}`, {
+                    method: "GET",
+                    credentials: "include"
+                });
+
+                if (!res.ok) return;
+
+                const data = await res.json();
+                console.log("Raw cart response:", data);
+                console.log("Cart array:", data.cart);
+
+                setIsHydrated(true);
+                setCart(data.cart ?? []);
+            } catch (err) {
+                console.error(err);
+            }
+        };
+
+        fetchCart();
+    }, [userId]);
 
     useEffect(() => {
         const restoreUser = async () => {
@@ -109,7 +136,7 @@ function App() {
                                     <Route path="currentdeals" element={<CurrentDeals />} />
                                     <Route path="aboutus" element={<AboutUs />} />
                                     <Route path="mostpopular" element={<MostPopular />} />
-                                    <Route path="cart" element={<Cart />} />
+                                    <Route path="cart" element={<Cart isHydrated={isHydrated} />} />
                                     <Route path="profile" element={<ProfilePage setAuthLoading={setAuthLoading} />} />
                                     <Route path="checkout" element={<Checkout />} />
                                 </Route>

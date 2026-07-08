@@ -1,10 +1,12 @@
-﻿import { useState, useEffect } from 'react';
+﻿import { useState, useEffect, useContext } from 'react';
 import styles from '../stylesheets/TopView.module.scss'
 import { NavLink } from 'react-router-dom';
 import { ProductContext } from '../App';
+import { CartContext } from '../context/CartContext.jsx'
 
 function TopNav({ open, setOpen, setSearchBar, darkmode, setDarkmode }) {
     const [menuOpen, setMenuOpen] = useState(false);
+    const { cart } = useContext(CartContext);
 
     useEffect(() => {
         if (open == true) {
@@ -64,6 +66,7 @@ function TopNav({ open, setOpen, setSearchBar, darkmode, setDarkmode }) {
                       <NavLink to='cart' end>
                           Cart
                       </NavLink>
+                      <span className={styles.cartNum}>{cart.reduce((accumulator, currentValue) => accumulator + currentValue.count, 0)}</span>
                   </li>
                   <li onMouseEnter={() => { window.innerWidth > 1040 ? setOpen(prev => !prev) : '' }}>
                       <NavLink to='/profile'>Profile</NavLink>

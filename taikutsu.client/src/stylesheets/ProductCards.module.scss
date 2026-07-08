@@ -11,16 +11,6 @@
         font-size: 48px;
         color: var(--auxText);
     }
-
-    @media screen and (max-width: 1040px) {
-        .productCard {
-            transform: scale(80%);
-        }
-
-        .productCard:hover{
-            transform: scale(85%);
-        }
-    }
 }
 
 .productCardList{

@@ -2,12 +2,17 @@ import styles from '../stylesheets/ProfilePage.module.scss';
 import DefaultProfilePic from '../assets/Twitter_default_profile_400x400.png';
 import { useContext, useEffect } from 'react';
 import { DarkModeContext, UserContext } from '../App';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useOutletContext } from 'react-router-dom';
 function ProfilePage({ setAuthLoading }) {
     const navigate = useNavigate();
+    const { setOpen } = useOutletContext();
     const { darkmode } = useContext(DarkModeContext);
     const { user, setUser } = useContext(UserContext);
     console.log(user);
+
+    useEffect(() => {
+        setOpen(false);
+    })
 
     const convertCategory = (str) => {
         return str
@@ -45,14 +50,14 @@ function ProfilePage({ setAuthLoading }) {
                     <div className={styles.profileBody}>
                         <div className={styles.topSection}>
                             <img src={DefaultProfilePic} />
-                            <div className={styles.nameAndEmail}>
+                            <div className={styles.name}>
                                 <span>{user.username}</span>
                             </div>
                         </div>
                         <hr />
                         <div className={styles.userPreferences}>
                             <span>Your preferences</span>
-                            <ul>
+                            {user.userpreferences.length > 0 ? <ul>
                                 {user.userpreferences.map(tag => {
                                     return (
                                         <div className={styles.preferenceTag}>
@@ -60,7 +65,7 @@ function ProfilePage({ setAuthLoading }) {
                                         </div>
                                     )
                                 })}
-                            </ul>
+                            </ul> : <span>You have no preferences yet.</span> }
                         </div>
                         <button className={styles.signOut} onClick={() => setUser(null) }>Sign Out</button>
                         <button className={styles.changePreferences} onClick={() => navigate('/preferences')}>Change Preferences</button>

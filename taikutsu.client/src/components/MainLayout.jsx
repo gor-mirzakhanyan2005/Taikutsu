@@ -13,7 +13,7 @@ function MainLayout({setSearchBar, darkmode, setDarkmode}) {
       <div>
           <TopNav open={open} setOpen={setOpen} setSearchBar={setSearchBar} darkmode={darkmode} setDarkmode={setDarkmode}/>
           {open == true ? <ProfileModal open={open} setOpen={setOpen} /> : ' '}
-          <Outlet />
+          <Outlet context={{ setOpen }} />
           <Footer />
       </div>
   );

@@ -71,6 +71,10 @@
                 width: 100%;
                 position: absolute;
 
+                .cartNum {
+                    display: none;
+                }
+
                 li {
                     background-color: var(--burgerMenuButton);
                     color: var(--auxText);
@@ -128,6 +132,24 @@
                         font-size: 18px;
                         background-color: #e9e9e9;
                     }
+                }
+
+                &:nth-child(6):hover {
+                    .cartNum {
+                        background-color: var(--cartNumHover);
+                        color: var(--auxText);
+                    }
+                }
+
+                .cartNum {
+                    background-color: var(--cartNum);
+                    color: var(--auxReverse);
+                    width: 40px;
+                    height: 27.5px;
+                    border-radius: 5000px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
                 }
             }
 

@@ -5,40 +5,13 @@ import { CartContext } from '../context/CartContext';
 import { DarkModeContext, UserContext } from '../App.jsx'
 import { useNavigate } from 'react-router-dom';
 
-function Cart() {
+function Cart({ isHydrated }) {
     const navigate = useNavigate();
     const { darkmode } = useContext(DarkModeContext);
     const { userId } = useContext(UserContext)
     const { cart, setCart } = useContext(CartContext);
     const [subtotal, setSubtotal] = useState(0);
-    const [isHydrated, setIsHydrated] = useState(false);
-
-    useEffect(() => {
-        if (!userId) return;
-
-        const fetchCart = async () => {
-            try {
-                const res = await fetch(`/api/cart?userId=${userId}`, {
-                    method: "GET",
-                    credentials: "include"
-                });
-
-                if (!res.ok) return;
-
-                const data = await res.json();
-                console.log("Raw cart response:", data);
-                console.log("Cart array:", data.cart);
-
-                setIsHydrated(true);
-                setCart(data.cart ?? []);
-            } catch (err) {
-                console.error(err);
-            }
-        };
-
-        fetchCart();
-    }, [userId]);
-
+   
     const handleIncrement = (id) => {
         const newArray = cart.map((item) => {
             if (item.productID === id) {
@@ -155,27 +128,34 @@ function Cart() {
     return (
         <div data-theme={darkmode ? "dark" : "light"} className={styles.cartBg}>
             <div className={styles.itemListCont}>
-                <ul className={styles.itemList}>
-                    {cart.map(item => {
-                        return (
-                            <li key={item.productID}>
-                                <div className={styles.cartItemCard}>
-                                    <img src={item.productThumbnail} />
-                                    <div className={styles.itemBlock}>
-                                        <span className={styles.name}>{item.productName}</span>
-                                        <div className={styles.counter}>
-                                            <button className={styles.decrement} onClick={() => handleDecrement(item.productID)}>-</button>
-                                            <div className={styles.countShow}>{item.count}</div>
-                                            <button className={styles.increment} onClick={() => handleIncrement(item.productID)}>+</button>
+                {cart.length === 0 ? <>
+                    <h2 className={styles.emptyCart}>Your cart is empty!</h2>
+                </> :
+                    <ul className={styles.itemList}>
+                        {cart.map(item => {
+                            return (
+                                <li key={item.productID}>
+                                    <div className={styles.cartItemCard}>
+                                        <img src={item.productThumbnail} />
+                                        <div className={styles.itemBlock}>
+                                            <span className={styles.name}>{item.productName}</span>
+                                            <div className={styles.counter}>
+                                                <button className={styles.decrement} onClick={() => handleDecrement(item.productID)}>-</button>
+                                                <div className={styles.countShow}>{item.count}</div>
+                                                <button className={styles.increment} onClick={() => handleIncrement(item.productID)}>+</button>
+                                            </div>
+                                            <button className={styles.removeItem} onClick={() => handleDelete(item.productID)}>Remove item</button>
                                         </div>
-                                        <button className={styles.removeItem} onClick={() => handleDelete(item.productID)}>Remove item</button>
+                                        <span className={styles.itemPrice}>
+                                            ${item.productDiscount !== 0
+                                                ? ((item.productPrice - (item.productPrice * (item.productDiscount / 100))) * item.count).toFixed(2)
+                                                : (item.productPrice * item.count).toFixed(2)}
+                                        </span>
                                     </div>
-                                    <span className={styles.itemPrice}>${item.productDiscount !== 0 ? (item.productPrice - (item.productPrice * (item.productDiscount / 100))).toFixed(2) * item.count : item.productPrice * item.count}</span>
-                                </div>
-                            </li>
-                        )
-                    })}
-                </ul>
+                                </li>
+                            )
+                        })}
+                    </ul>}
             </div>
             <div className={styles.subtotalAndCheckout}>
                 <span className={styles.subtotal}>Subtotal:</span>

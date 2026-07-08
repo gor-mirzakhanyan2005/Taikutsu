@@ -2,7 +2,10 @@ import React from 'react';
 import styles from "../stylesheets/Pagination.module.scss";
 import { useEffect } from 'react';
 
-const Pages = ({ currentPage, setCurrentPage, displayItems, pageKey }) => {
+const Pages = ({ currentPage, setCurrentPage, displayItems, pageKey, pageSize = 12 }) => {
+    const totalPages = Math.ceil(displayItems.length / pageSize);
+    const isLastPage = currentPage >= totalPages;
+
     useEffect(() => {
         if (pageKey == 'maincurrentpage') {
             localStorage.setItem('maincurrentpage', currentPage);
@@ -44,7 +47,7 @@ const Pages = ({ currentPage, setCurrentPage, displayItems, pageKey }) => {
                 <li>
                     <h2 className={styles.pageNumber}>{currentPage}</h2>
                 </li>
-                {displayItems.length > 5 ?
+                {!isLastPage ?
                     <li>
                         <button className={styles.pageButton} onClick={handleForth}>{currentPage + 1}</button>
                     </li>

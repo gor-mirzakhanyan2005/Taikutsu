@@ -46,7 +46,7 @@
                         font-weight: bold;
                     }
 
-                    a{
+                    a {
                         border-radius: 200px;
                         padding: 10px 55px;
                         background-color: var(--profileChipButton);
@@ -70,12 +70,19 @@
                 }
 
                 button {
-                    background-color: var(--profileChipButton);
+                    background-color: var(--profileButton);
+                    color: var(--profileButtonText);
+                    cursor: pointer;
                     width: 200px;
                     padding: 10px;
                     border: none;
                     border-radius: 20px;
                 }
+
+                    button:hover {
+                        background-color: var(--profileButtonHover);
+                        color: var(--profileButtonTextHover);
+                    }
             }
         }
     }

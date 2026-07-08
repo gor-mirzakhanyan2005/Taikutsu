@@ -34,6 +34,9 @@
     --cartContainer: white;
     --cartCardBorder: #ff7700;
     --profileButton: #ff7700;
+    --profileButtonHover: black;
+    --profileButtonText: white;
+    --profileButtonTextHover: white;
     --importantText: #ff7700;
     --noProfileBg: white;
     --profileModal: white;
@@ -58,6 +61,8 @@
     --preferenceTagBg: #ff7700;
     --pageButton: #ff7700;
     --spinner: #ff7700;
+    --cartNum: #ff7700;
+    --cartNumHover: white;
 }
 
 [data-theme="dark"] {
@@ -96,6 +101,9 @@
     --cartContainer: #2a2a3e;
     --cartCardBorder: #2ed18e;
     --profileButton: #2ed18e;
+    --profileButtonHover: black;
+    --profileButtonText: black;
+    --profileButtonTextHover: white;
     --importantText: #2ed18e;
     --noProfileBg: rgba(46, 29, 89, 1);
     --profileModal: #2a2a3e;
@@ -120,4 +128,6 @@
     --preferenceTagBg: #2ed18e;
     --pageButton: #2ed18e;
     --spinner: #2ed18e;
+    --cartNum: #2ed18e;
+    --cartNumHover: black;
 }

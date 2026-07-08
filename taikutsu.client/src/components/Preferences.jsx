@@ -94,7 +94,11 @@ function Preferences() {
                 }
             }
 
-            alert("Preferences confirmed successfully!");
+            if (categories.length === 0) {
+                alert("Successfully ignored!");
+            } else {
+                alert("Preferences confirmed successfully!");
+            }
             navigate("/");
         } catch (err) {
             console.error(err);
@@ -128,7 +132,7 @@ function Preferences() {
                   {more ? 'Show Less' : 'Show More'}
               </button>
           </div>
-          <button className={styles.confirmPreferences} onClick={handleConfirm}>Confirm preferences</button>
+          <button className={styles.confirmPreferences} onClick={handleConfirm}>{categories.length === 0 ? "Disregard and continue" : "Confirm preferences" }</button>
       </div>
   );
 }
